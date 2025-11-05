@@ -451,7 +451,8 @@ Level & Overall Score & Syntax Valid & Can Execute & Has Steps \\
 \midrule
 """
         for level, row in by_level.iterrows():
-            latex += f"{level.capitalize()} & {row['overall_score']:.1f} & {row['syntax_valid']:.1f}\% & {row['can_execute']:.1f}\% & {row['has_calculation_steps']:.1f}\% \\\\\n"
+            latex += fr"{row['syntax_valid']:.1f}% & {row['can_execute']:.1f}% & {row['has_calculation_steps']:.1f}% \\\\"
+
         
         latex += r"""\bottomrule
 \end{tabular}

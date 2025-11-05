@@ -1,6 +1,6 @@
 """
-Model Comparison: Base Model vs Fine-Tuned Model
-Generates comparative evaluation for research paper
+Final Model Comparison for Paper
+Compares Base Gemini vs Fine-Tuned DeepSeek-Coder
 """
 
 import json
@@ -8,312 +8,274 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 from pathlib import Path
-from typing import Dict, List
-import numpy as np
-from datetime import datetime
+import torch
+from transformers import AutoTokenizer, AutoModelForCausalLM
 
 from evaluation_framework import DerivativeAnimatorEvaluator
-from manim_generator import generate_manim_code
 
-class ModelComparison:
-    """Compare base model vs fine-tuned model performance"""
-    
-    def __init__(self, output_dir: str = "model_comparison"):
+class FinalModelComparison:
+    def __init__(self, output_dir: str = "final_comparison"):
         self.output_dir = Path(output_dir)
         self.output_dir.mkdir(exist_ok=True)
         self.evaluator = DerivativeAnimatorEvaluator()
-        
-    def load_test_functions(self, test_file: str = "derivative_dataset_537/finetuning/test.jsonl") -> List[str]:
-        """Load test functions"""
-        functions = []
+        self.ft_model = None
+        self.ft_tokenizer = None
+    
+    def load_test_data(self, test_file: str):
+        """Load test data"""
+        test_data = []
         with open(test_file, 'r') as f:
             for line in f:
-                data = json.loads(line)
-                functions.append(data['function'])
-        return functions
+                test_data.append(json.loads(line))
+        return test_data
     
-    def generate_with_base_model(self, function: str) -> tuple:
-        """Generate code with base model"""
-        code, metadata = generate_manim_code(
-            function,
-            max_attempts=3,
-            use_thinking=False,  # Base model
-            skip_execution_test=True
+    def load_finetuned_model(self, model_path: str):
+        """Load fine-tuned model once"""
+        if self.ft_model is not None:
+            return
+        
+        print(f"\n🔄 Loading fine-tuned model: {model_path}")
+        
+        self.ft_tokenizer = AutoTokenizer.from_pretrained(model_path)
+        self.ft_model = AutoModelForCausalLM.from_pretrained(
+            model_path,
+            torch_dtype=torch.float16,
+            device_map="auto",
+            trust_remote_code=True
         )
+        self.ft_model.eval()
+        print("✓ Model loaded")
+    
+    def generate_with_finetuned(self, sample: dict) -> tuple:
+        """Generate with fine-tuned model"""
+        
+        # Match training format
+        prompt = f"""Task: Generate Manim code for derivative visualization
+
+Function: {sample['input']}
+
+Code:
+"""
+        
+        inputs = self.ft_tokenizer(
+            prompt,
+            return_tensors="pt",
+            truncation=True,
+            max_length=2048
+        ).to(self.ft_model.device)
+        
+        with torch.no_grad():
+            outputs = self.ft_model.generate(
+                **inputs,
+                max_new_tokens=1536,
+                temperature=0.1,
+                do_sample=False,
+                pad_token_id=self.ft_tokenizer.eos_token_id,
+                eos_token_id=self.ft_tokenizer.eos_token_id,
+            )
+        
+        generated = self.ft_tokenizer.decode(
+            outputs[0][inputs['input_ids'].shape[1]:],
+            skip_special_tokens=True
+        )
+        
+        # Extract code
+        code = self._extract_code(generated)
+        metadata = {"model": "fine-tuned", "generated_length": len(generated)}
+        
         return code, metadata
     
-    def generate_with_finetuned_model(self, function: str, model_path: str) -> tuple:
-        """Generate code with fine-tuned model"""
-        # TODO: Implement inference with fine-tuned model
-        # This is a placeholder - actual implementation depends on your fine-tuned model
-        # For now, use thinking mode as proxy for "better" model
-        code, metadata = generate_manim_code(
-            function,
-            max_attempts=3,
-            use_thinking=True,  # Fine-tuned proxy
-            skip_execution_test=True
-        )
-        return code, metadata
+    def _extract_code(self, text: str) -> str:
+        """Extract Python code from generated text"""
+        import re
+        
+        # Try markdown blocks
+        match = re.search(r'```python\s*(.*?)\s*```', text, re.DOTALL)
+        if match:
+            return match.group(1).strip()
+        
+        match = re.search(r'```\s*(.*?)\s*```', text, re.DOTALL)
+        if match:
+            return match.group(1).strip()
+        
+        # Look for manim import
+        if "from manim import" in text:
+            idx = text.find("from manim import")
+            return text[idx:].strip()
+        
+        # Check if it already looks like code
+        if "class DerivativeVisualization" in text:
+            return text.strip()
+        
+        return ""
     
-    def compare_on_test_set(self, 
-                           test_functions: List[str],
-                           finetuned_model_path: str = None,
-                           sample_size: int = 50) -> pd.DataFrame:
-        """Run comparison on test set"""
+    def compare_models(self, test_data: list, finetuned_model_path: str, sample_size: int = None):
+        """Run comparison"""
         
         print("\n" + "="*70)
-        print("MODEL COMPARISON: BASE vs FINE-TUNED")
+        print("FINAL MODEL COMPARISON FOR PAPER")
+        print("="*70)
+        print("\nBase Model: Gemini 2.5-Flash (Zero-Shot)")
+        print("Fine-Tuned: DeepSeek-Coder-1.3B")
         print("="*70 + "\n")
+        
+        # Load fine-tuned model
+        self.load_finetuned_model(finetuned_model_path)
+        
+        # Sample if needed
+        if sample_size:
+            import random
+            random.seed(42)
+            test_data = random.sample(test_data, min(sample_size, len(test_data)))
+        
+        print(f"Testing on {len(test_data)} functions...\n")
         
         results = []
         
-        # Sample if needed
-        if sample_size and len(test_functions) > sample_size:
-            import random
-            random.seed(42)
-            test_functions = random.sample(test_functions, sample_size)
-        
-        print(f"Testing on {len(test_functions)} functions...\n")
-        
-        for i, function in enumerate(test_functions, 1):
-            print(f"[{i}/{len(test_functions)}] Testing: f(x) = {function}")
+        for i, sample in enumerate(test_data, 1):
+            function = sample['input']
+            ground_truth = sample['output']
             
-            # Base model
-            print("  → Base model...")
-            base_code, base_meta = self.generate_with_base_model(function)
-            base_metrics = self.evaluator.evaluate_code(base_code, skip_execution=True) if base_code else None
+            print(f"[{i}/{len(test_data)}] f(x) = {function}")
             
             # Fine-tuned model
-            print("  → Fine-tuned model...")
-            ft_code, ft_meta = self.generate_with_finetuned_model(function, finetuned_model_path)
-            ft_metrics = self.evaluator.evaluate_code(ft_code, skip_execution=True) if ft_code else None
+            print("  → Fine-Tuned Model...")
+            try:
+                ft_code, ft_meta = self.generate_with_finetuned(sample)
+                ft_metrics = self.evaluator.evaluate_code(ft_code, skip_execution=True) if ft_code else None
+                
+                if ft_metrics:
+                    print(f"    ✓ Score: {ft_metrics.overall_score:.1f}")
+                else:
+                    print(f"    ✗ Failed")
+            except Exception as e:
+                print(f"    ✗ Error: {e}")
+                ft_code, ft_metrics = "", None
+                ft_meta = {"error": str(e)}
             
-            # Compare
+            # Ground truth (baseline)
+            print("  → Ground Truth (Baseline)...")
+            gt_metrics = self.evaluator.evaluate_code(ground_truth, skip_execution=True)
+            print(f"    ✓ Score: {gt_metrics.overall_score:.1f}")
+            
+            # Record results
             result = {
                 'function': function,
-                'base_success': bool(base_code),
-                'base_attempts': base_meta.get('attempts', 0) if base_code else 3,
-                'base_score': base_metrics.overall_score if base_metrics else 0,
-                'base_syntax_valid': base_metrics.syntax_valid if base_metrics else False,
-                'base_has_steps': base_metrics.has_calculation_steps if base_metrics else False,
+                'level': sample.get('level', 'unknown'),
+                
+                # Fine-tuned metrics
                 'ft_success': bool(ft_code),
-                'ft_attempts': ft_meta.get('attempts', 0) if ft_code else 3,
                 'ft_score': ft_metrics.overall_score if ft_metrics else 0,
-                'ft_syntax_valid': ft_metrics.syntax_valid if ft_metrics else False,
+                'ft_syntax': ft_metrics.syntax_valid if ft_metrics else False,
                 'ft_has_steps': ft_metrics.has_calculation_steps if ft_metrics else False,
-                'improvement': (ft_metrics.overall_score - base_metrics.overall_score) if (base_metrics and ft_metrics) else 0
+                'ft_code_length': len(ft_code),
+                
+                # Ground truth metrics
+                'gt_score': gt_metrics.overall_score,
+                'gt_syntax': gt_metrics.syntax_valid,
+                'gt_has_steps': gt_metrics.has_calculation_steps,
+                'gt_length': len(ground_truth),
+                
+                # Comparison
+                'score_ratio': (ft_metrics.overall_score / gt_metrics.overall_score * 100) if (ft_metrics and gt_metrics.overall_score > 0) else 0,
             }
             
             results.append(result)
-            
-            print(f"    Base: {result['base_score']:.1f} | FT: {result['ft_score']:.1f} | Δ: {result['improvement']:+.1f}")
+            print(f"    Performance: {result['score_ratio']:.1f}% of ground truth\n")
         
-        df = pd.DataFrame(results)
-        return df
+        return pd.DataFrame(results)
     
-    def generate_comparison_visualizations(self, df: pd.DataFrame):
-        """Generate comparison visualizations for paper"""
+    def generate_visualizations(self, df: pd.DataFrame):
+        """Generate paper-ready visualizations"""
         
-        print("\n📊 Generating comparison visualizations...")
+        print("\n📊 Generating visualizations...")
         
-        # Set style
         sns.set_style("whitegrid")
+        plt.rcParams['font.size'] = 11
         
-        # 1. Overall Score Comparison
-        self._plot_score_comparison(df)
+        # 1. Main comparison
+        fig, axes = plt.subplots(2, 2, figsize=(14, 10))
         
-        # 2. Success Rate Comparison
-        self._plot_success_rates(df)
+        # Score comparison
+        ax = axes[0, 0]
+        means = [df['gt_score'].mean(), df['ft_score'].mean()]
+        labels = ['Ground Truth\n(Gemini-Generated)', 'Fine-Tuned\n(DeepSeek-1.3B)']
+        colors = ['#2ecc71', '#3498db']
         
-        # 3. Attempts Distribution
-        self._plot_attempts_comparison(df)
-        
-        # 4. Improvement Distribution
-        self._plot_improvement_distribution(df)
-        
-        # 5. Metric Breakdown
-        self._plot_metric_breakdown(df)
-        
-        print(f"✓ Visualizations saved to: {self.output_dir}")
-    
-    def _plot_score_comparison(self, df: pd.DataFrame):
-        """Plot overall score comparison"""
-        fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 6))
-        
-        # Bar chart
-        means = [df['base_score'].mean(), df['ft_score'].mean()]
-        labels = ['Base Model', 'Fine-Tuned Model']
-        colors = ['#e74c3c', '#2ecc71']
-        
-        bars = ax1.bar(labels, means, color=colors, edgecolor='black', linewidth=1.5)
+        bars = ax.bar(labels, means, color=colors, edgecolor='black', linewidth=1.5)
         for bar in bars:
             height = bar.get_height()
-            ax1.text(bar.get_x() + bar.get_width()/2., height,
-                    f'{height:.1f}',
-                    ha='center', va='bottom', fontweight='bold', fontsize=14)
+            ax.text(bar.get_x() + bar.get_width()/2., height,
+                   f'{height:.1f}',
+                   ha='center', va='bottom', fontweight='bold')
         
-        ax1.set_ylabel('Overall Score', fontsize=12)
-        ax1.set_title('Average Overall Score Comparison', fontsize=14, fontweight='bold')
-        ax1.set_ylim(0, 100)
-        ax1.grid(axis='y', alpha=0.3)
+        ax.set_ylabel('Overall Score', fontweight='bold')
+        ax.set_title('(a) Average Overall Score', fontweight='bold', loc='left')
+        ax.set_ylim(0, 100)
+        ax.grid(axis='y', alpha=0.3)
         
-        # Scatter plot
-        ax2.scatter(df['base_score'], df['ft_score'], alpha=0.6, s=50)
-        ax2.plot([0, 100], [0, 100], 'r--', linewidth=2, label='Equal Performance')
-        ax2.set_xlabel('Base Model Score', fontsize=12)
-        ax2.set_ylabel('Fine-Tuned Model Score', fontsize=12)
-        ax2.set_title('Score Comparison (Per Function)', fontsize=14, fontweight='bold')
-        ax2.legend()
-        ax2.grid(alpha=0.3)
-        
-        plt.tight_layout()
-        plt.savefig(self.output_dir / 'fig_score_comparison.png', dpi=300, bbox_inches='tight')
-        plt.close()
-        print("  ✓ Score comparison")
-    
-    def _plot_success_rates(self, df: pd.DataFrame):
-        """Plot success rate comparison"""
-        fig, ax = plt.subplots(figsize=(10, 6))
-        
-        metrics = ['Success Rate', 'Syntax Valid', 'Has Steps']
-        base_rates = [
-            df['base_success'].mean() * 100,
-            df['base_syntax_valid'].mean() * 100,
-            df['base_has_steps'].mean() * 100
+        # Success rates
+        ax = axes[0, 1]
+        metrics = ['Success', 'Syntax\nValid', 'Has\nSteps']
+        gt_rates = [
+            df['gt_syntax'].mean() * 100,
+            df['gt_syntax'].mean() * 100,
+            df['gt_has_steps'].mean() * 100
         ]
         ft_rates = [
             df['ft_success'].mean() * 100,
-            df['ft_syntax_valid'].mean() * 100,
+            df['ft_syntax'].mean() * 100,
             df['ft_has_steps'].mean() * 100
         ]
         
-        x = np.arange(len(metrics))
+        x = range(len(metrics))
         width = 0.35
         
-        bars1 = ax.bar(x - width/2, base_rates, width, label='Base Model', 
-                      color='#e74c3c', edgecolor='black', linewidth=1.5)
-        bars2 = ax.bar(x + width/2, ft_rates, width, label='Fine-Tuned Model',
-                      color='#2ecc71', edgecolor='black', linewidth=1.5)
+        ax.bar([i-width/2 for i in x], gt_rates, width, label='Ground Truth', color='#2ecc71', edgecolor='black')
+        ax.bar([i+width/2 for i in x], ft_rates, width, label='Fine-Tuned', color='#3498db', edgecolor='black')
         
-        # Add value labels
-        for bars in [bars1, bars2]:
-            for bar in bars:
-                height = bar.get_height()
-                ax.text(bar.get_x() + bar.get_width()/2., height,
-                       f'{height:.1f}%',
-                       ha='center', va='bottom', fontweight='bold')
-        
-        ax.set_ylabel('Percentage (%)', fontsize=12)
-        ax.set_title('Success Metrics Comparison', fontsize=14, fontweight='bold')
+        ax.set_ylabel('Percentage (%)', fontweight='bold')
+        ax.set_title('(b) Success Metrics', fontweight='bold', loc='left')
         ax.set_xticks(x)
-        ax.set_xticklabels(metrics, fontsize=11)
-        ax.legend(fontsize=11)
+        ax.set_xticklabels(metrics)
+        ax.legend()
         ax.set_ylim(0, 110)
         ax.grid(axis='y', alpha=0.3)
         
-        plt.tight_layout()
-        plt.savefig(self.output_dir / 'fig_success_rates.png', dpi=300, bbox_inches='tight')
-        plt.close()
-        print("  ✓ Success rates")
-    
-    def _plot_attempts_comparison(self, df: pd.DataFrame):
-        """Plot attempts distribution"""
-        fig, ax = plt.subplots(figsize=(10, 6))
+        # Performance ratio distribution
+        ax = axes[1, 0]
+        ax.hist(df['score_ratio'], bins=20, color='#3498db', edgecolor='black', alpha=0.7)
+        ax.axvline(df['score_ratio'].mean(), color='red', linestyle='--', linewidth=2,
+                  label=f'Mean: {df["score_ratio"].mean():.1f}%')
+        ax.axvline(100, color='green', linestyle='--', linewidth=2, label='Perfect Match')
         
-        ax.hist(df['base_attempts'], bins=range(1, 5), alpha=0.5, label='Base Model',
-               color='#e74c3c', edgecolor='black')
-        ax.hist(df['ft_attempts'], bins=range(1, 5), alpha=0.5, label='Fine-Tuned Model',
-               color='#2ecc71', edgecolor='black')
-        
-        ax.set_xlabel('Number of Attempts', fontsize=12)
-        ax.set_ylabel('Frequency', fontsize=12)
-        ax.set_title('Attempts Distribution Comparison', fontsize=14, fontweight='bold')
-        ax.legend(fontsize=11)
+        ax.set_xlabel('Performance Ratio (%)', fontweight='bold')
+        ax.set_ylabel('Frequency', fontweight='bold')
+        ax.set_title('(c) Performance Distribution', fontweight='bold', loc='left')
+        ax.legend()
         ax.grid(axis='y', alpha=0.3)
         
-        # Add mean lines
-        ax.axvline(df['base_attempts'].mean(), color='#e74c3c', linestyle='--', 
-                  linewidth=2, label=f'Base Mean: {df["base_attempts"].mean():.2f}')
-        ax.axvline(df['ft_attempts'].mean(), color='#2ecc71', linestyle='--',
-                  linewidth=2, label=f'FT Mean: {df["ft_attempts"].mean():.2f}')
+        # By level
+        ax = axes[1, 1]
+        level_data = df.groupby('level')['score_ratio'].mean().sort_values()
+        
+        bars = ax.barh(range(len(level_data)), level_data.values, color='#3498db', edgecolor='black')
+        ax.set_yticks(range(len(level_data)))
+        ax.set_yticklabels([l.capitalize() for l in level_data.index])
+        ax.set_xlabel('Performance Ratio (%)', fontweight='bold')
+        ax.set_title('(d) Performance by Curriculum Level', fontweight='bold', loc='left')
+        ax.axvline(100, color='green', linestyle='--', linewidth=2, alpha=0.5)
+        ax.grid(axis='x', alpha=0.3)
         
         plt.tight_layout()
-        plt.savefig(self.output_dir / 'fig_attempts_distribution.png', dpi=300, bbox_inches='tight')
+        plt.savefig(self.output_dir / 'comparison_figure.png', dpi=300, bbox_inches='tight')
         plt.close()
-        print("  ✓ Attempts distribution")
+        print("  ✓ comparison_figure.png")
     
-    def _plot_improvement_distribution(self, df: pd.DataFrame):
-        """Plot improvement distribution"""
-        fig, ax = plt.subplots(figsize=(10, 6))
+    def generate_report(self, df: pd.DataFrame):
+        """Generate paper-ready report"""
         
-        ax.hist(df['improvement'], bins=20, color='#3498db', edgecolor='black', alpha=0.7)
-        ax.axvline(0, color='red', linestyle='--', linewidth=2, label='No Improvement')
-        ax.axvline(df['improvement'].mean(), color='green', linestyle='--', linewidth=2,
-                  label=f'Mean: {df["improvement"].mean():.1f}')
-        
-        ax.set_xlabel('Score Improvement (Fine-Tuned - Base)', fontsize=12)
-        ax.set_ylabel('Frequency', fontsize=12)
-        ax.set_title('Distribution of Score Improvements', fontsize=14, fontweight='bold')
-        ax.legend(fontsize=11)
-        ax.grid(axis='y', alpha=0.3)
-        
-        # Add statistics text
-        improved = (df['improvement'] > 0).sum()
-        total = len(df)
-        text = f"Improved: {improved}/{total} ({improved/total*100:.1f}%)"
-        ax.text(0.05, 0.95, text, transform=ax.transAxes, fontsize=12,
-               verticalalignment='top', bbox=dict(boxstyle='round', facecolor='wheat', alpha=0.5))
-        
-        plt.tight_layout()
-        plt.savefig(self.output_dir / 'fig_improvement_distribution.png', dpi=300, bbox_inches='tight')
-        plt.close()
-        print("  ✓ Improvement distribution")
-    
-    def _plot_metric_breakdown(self, df: pd.DataFrame):
-        """Plot detailed metric breakdown"""
-        fig, ax = plt.subplots(figsize=(12, 6))
-        
-        metrics = ['Overall\nScore', 'Syntax\nValid', 'Has\nSteps', 'Success\nRate']
-        base_values = [
-            df['base_score'].mean(),
-            df['base_syntax_valid'].mean() * 100,
-            df['base_has_steps'].mean() * 100,
-            df['base_success'].mean() * 100
-        ]
-        ft_values = [
-            df['ft_score'].mean(),
-            df['ft_syntax_valid'].mean() * 100,
-            df['ft_has_steps'].mean() * 100,
-            df['ft_success'].mean() * 100
-        ]
-        improvements = [ft - base for ft, base in zip(ft_values, base_values)]
-        
-        x = np.arange(len(metrics))
-        width = 0.25
-        
-        ax.bar(x - width, base_values, width, label='Base Model', 
-              color='#e74c3c', edgecolor='black')
-        ax.bar(x, ft_values, width, label='Fine-Tuned Model',
-              color='#2ecc71', edgecolor='black')
-        ax.bar(x + width, improvements, width, label='Improvement',
-              color='#3498db', edgecolor='black')
-        
-        ax.set_ylabel('Score / Percentage', fontsize=12)
-        ax.set_title('Detailed Metric Breakdown', fontsize=14, fontweight='bold')
-        ax.set_xticks(x)
-        ax.set_xticklabels(metrics, fontsize=10)
-        ax.legend(fontsize=11)
-        ax.grid(axis='y', alpha=0.3)
-        
-        plt.tight_layout()
-        plt.savefig(self.output_dir / 'fig_metric_breakdown.png', dpi=300, bbox_inches='tight')
-        plt.close()
-        print("  ✓ Metric breakdown")
-    
-    def generate_comparison_table(self, df: pd.DataFrame):
-        """Generate LaTeX comparison table"""
-        
-        print("\n📝 Generating comparison table...")
+        print("\n📝 Generating report...")
         
         summary = {
             'Metric': [
@@ -321,80 +283,102 @@ class ModelComparison:
                 'Syntax Valid (%)',
                 'Has Calculation Steps (%)',
                 'Average Overall Score',
-                'Average Attempts',
-                'Median Score'
+                'Median Overall Score',
+                'Average Code Length (chars)',
             ],
-            'Base Model': [
-                f"{df['base_success'].mean() * 100:.1f}",
-                f"{df['base_syntax_valid'].mean() * 100:.1f}",
-                f"{df['base_has_steps'].mean() * 100:.1f}",
-                f"{df['base_score'].mean():.1f}",
-                f"{df['base_attempts'].mean():.2f}",
-                f"{df['base_score'].median():.1f}"
+            'Ground Truth': [
+                f"{df['gt_syntax'].mean() * 100:.1f}",
+                f"{df['gt_syntax'].mean() * 100:.1f}",
+                f"{df['gt_has_steps'].mean() * 100:.1f}",
+                f"{df['gt_score'].mean():.1f}",
+                f"{df['gt_score'].median():.1f}",
+                f"{df['gt_length'].mean():.0f}",
             ],
             'Fine-Tuned Model': [
                 f"{df['ft_success'].mean() * 100:.1f}",
-                f"{df['ft_syntax_valid'].mean() * 100:.1f}",
+                f"{df['ft_syntax'].mean() * 100:.1f}",
                 f"{df['ft_has_steps'].mean() * 100:.1f}",
                 f"{df['ft_score'].mean():.1f}",
-                f"{df['ft_attempts'].mean():.2f}",
-                f"{df['ft_score'].median():.1f}"
+                f"{df['ft_score'].median():.1f}",
+                f"{df['ft_code_length'].mean():.0f}",
             ],
-            'Improvement': [
-                f"+{(df['ft_success'].mean() - df['base_success'].mean()) * 100:.1f}",
-                f"+{(df['ft_syntax_valid'].mean() - df['base_syntax_valid'].mean()) * 100:.1f}",
-                f"+{(df['ft_has_steps'].mean() - df['base_has_steps'].mean()) * 100:.1f}",
-                f"+{df['ft_score'].mean() - df['base_score'].mean():.1f}",
-                f"{df['ft_attempts'].mean() - df['base_attempts'].mean():.2f}",
-                f"+{df['ft_score'].median() - df['base_score'].median():.1f}"
+            'Performance Ratio': [
+                f"{df['ft_success'].mean() / df['gt_syntax'].mean() * 100:.1f}%",
+                f"{df['ft_syntax'].mean() / df['gt_syntax'].mean() * 100:.1f}%",
+                f"{df['ft_has_steps'].mean() / df['gt_has_steps'].mean() * 100:.1f}%",
+                f"{df['score_ratio'].mean():.1f}%",
+                f"{df['score_ratio'].median():.1f}%",
+                f"{df['ft_code_length'].mean() / df['gt_length'].mean() * 100:.1f}%",
             ]
         }
         
         df_table = pd.DataFrame(summary)
-        
-        # Save as CSV
         df_table.to_csv(self.output_dir / 'comparison_table.csv', index=False)
         
-        # Save as LaTeX
-        latex = df_table.to_latex(index=False, escape=False)
+        # Generate LaTeX table
+        latex = r"""\begin{table}[h]
+\centering
+\caption{Performance Comparison: Ground Truth vs Fine-Tuned Model}
+\begin{tabular}{lccc}
+\toprule
+\textbf{Metric} & \textbf{Ground Truth} & \textbf{Fine-Tuned} & \textbf{Ratio} \\
+\midrule
+"""
+        for _, row in df_table.iterrows():
+            latex += f"{row['Metric']} & {row['Ground Truth']} & {row['Fine-Tuned Model']} & {row['Performance Ratio']} \\\\\n"
+        
+        latex += r"""\bottomrule
+\end{tabular}
+\end{table}"""
+        
         with open(self.output_dir / 'comparison_table.tex', 'w') as f:
             f.write(latex)
         
-        print(f"  ✓ Comparison table saved")
+        print("  ✓ comparison_table.csv")
+        print("  ✓ comparison_table.tex")
         
-        # Print to console
         print("\n" + "="*70)
-        print("COMPARISON SUMMARY")
+        print("RESULTS SUMMARY")
         print("="*70)
         print(df_table.to_string(index=False))
 
 def main():
     print("\n" + "="*70)
-    print("MODEL COMPARISON TOOL")
+    print("FINAL MODEL COMPARISON FOR PAPER")
     print("="*70)
     
-    # Initialize
-    comparator = ModelComparison()
+    comparator = FinalModelComparison()
     
-    # Load test functions
-    test_functions = comparator.load_test_functions()
-    print(f"\n✓ Loaded {len(test_functions)} test functions")
+    # Load test data
+    test_data = comparator.load_test_data("derivative_dataset_537/finetuning/hf_test.jsonl")
+    print(f"\n✓ Loaded {len(test_data)} test samples")
     
     # Run comparison
-    df = comparator.compare_on_test_set(test_functions, sample_size=50)
+    model_path = "derivative-animator-deepseek-1.3b/merged_model"
     
-    # Save results
-    df.to_csv(comparator.output_dir / 'comparison_results.csv', index=False)
-    print(f"\n✓ Results saved to: {comparator.output_dir}/comparison_results.csv")
+    df = comparator.compare_models(
+        test_data,
+        finetuned_model_path=model_path,
+        sample_size=50  # Use all test samples or specify number
+    )
+    
+    # Save detailed results
+    df.to_csv(comparator.output_dir / 'detailed_results.csv', index=False)
+    print(f"\n✓ Saved: detailed_results.csv")
     
     # Generate visualizations
-    comparator.generate_comparison_visualizations(df)
+    comparator.generate_visualizations(df)
     
-    # Generate table
-    comparator.generate_comparison_table(df)
+    # Generate report
+    comparator.generate_report(df)
     
-    print("\n✅ Model comparison complete!")
+    print("\n✅ Comparison complete!")
     print(f"📁 All outputs in: {comparator.output_dir}/")
+    print("\nFiles generated:")
+    print("  • comparison_figure.png - 4-panel visualization for paper")
+    print("  • comparison_table.csv - Summary statistics")
+    print("  • comparison_table.tex - LaTeX table for paper")
+    print("  • detailed_results.csv - Per-function results")
 
 if __name__ == "__main__":
     main()

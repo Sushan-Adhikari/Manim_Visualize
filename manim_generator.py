@@ -7,10 +7,14 @@ from dotenv import load_dotenv
 from google import genai
 from google.genai import types
 
-# Load environment variables
-load_dotenv()
-api_key = os.getenv("GEMINI_API_KEY")
-client = genai.Client(api_key=api_key)
+# Instead of loading from .env, just set it directly
+GEMINI_API_KEY = "AIzaSyAbUTtCJeCYePQhe5rlPoSZSDKbIWNhesE"
+
+
+client = genai.Client(api_key=GEMINI_API_KEY)
+
+# Now you can use `client` normally
+
 
 # IMPROVED TEMPLATE - Using placeholders that won't confuse the AI
 CODE_TEMPLATE = """from manim import *
