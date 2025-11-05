@@ -1,0 +1,12 @@
+Metric,Value
+Total Functions,535
+Successfully Generated,525
+Failed Generations,10
+Overall Success Rate,98.13\%
+Mean Attempts (Successful),1.10
+Median Attempts (Successful),1
+Mean Code Length,3536
+Median Code Length,3512
+Std Dev Code Length,100
+Most Common Function Type,Trigonometric
+Least Common Function Type,Linear

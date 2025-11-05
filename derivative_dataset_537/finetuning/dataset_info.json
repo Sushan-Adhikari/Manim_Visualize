@@ -1,0 +1,77 @@
+{
+  "dataset_name": "DerivativeAnimator-Manim-537",
+  "version": "1.0",
+  "description": "Fine-tuning dataset for automated Manim code generation for derivative visualizations",
+  "total_samples": 525,
+  "splits": {
+    "train": 418,
+    "validation": 50,
+    "test": 57
+  },
+  "splits_percentage": {
+    "train": "79.6%",
+    "validation": "9.5%",
+    "test": "10.9%"
+  },
+  "by_level": {
+    "foundation": {
+      "train": 101,
+      "val": 12,
+      "test": 14
+    },
+    "conceptual": {
+      "train": 124,
+      "val": 15,
+      "test": 17
+    },
+    "application": {
+      "train": 150,
+      "val": 18,
+      "test": 20
+    },
+    "advanced": {
+      "train": 43,
+      "val": 5,
+      "test": 6
+    }
+  },
+  "formats_generated": [
+    "openai_train.jsonl - OpenAI GPT-3.5/4 fine-tuning",
+    "openai_val.jsonl - OpenAI validation set",
+    "huggingface_dataset.json - HuggingFace Transformers format",
+    "train.jsonl, val.jsonl, test.jsonl - Universal JSONL format",
+    "instruction_dataset.json - Instruction-tuning format (Alpaca/Vicuna)"
+  ],
+  "recommended_models": [
+    "OpenAI GPT-3.5-turbo",
+    "OpenAI GPT-4",
+    "CodeLlama-7b/13b/34b",
+    "DeepSeek-Coder-6.7b/33b",
+    "StarCoder-15b",
+    "WizardCoder-15b"
+  ],
+  "recommended_hyperparameters": {
+    "openai_gpt35": {
+      "n_epochs": 3,
+      "learning_rate_multiplier": 0.1,
+      "batch_size": 4
+    },
+    "codellama_7b": {
+      "num_train_epochs": 3,
+      "learning_rate": 2e-05,
+      "per_device_train_batch_size": 4,
+      "gradient_accumulation_steps": 4,
+      "max_length": 2048,
+      "use_lora": true,
+      "lora_r": 16,
+      "lora_alpha": 32
+    }
+  },
+  "usage_examples": {
+    "openai_cli": "openai api fine_tunes.create -t openai_train.jsonl -v openai_val.jsonl -m gpt-3.5-turbo --n_epochs 3",
+    "huggingface_python": "datasets.load_dataset('json', data_files='huggingface_dataset.json')"
+  },
+  "citation": {
+    "bibtex": "@dataset{derivativeanimator2025,\n  title={DerivativeAnimator: Automated Manim Code Generation Dataset},\n  author={Adhikari, Sushan and Sharma, Sunidhi and Lamichhane, Darshan and Adhikari, Usan},\n  year={2025},\n  publisher={Research Project}\n}"
+  }
+}

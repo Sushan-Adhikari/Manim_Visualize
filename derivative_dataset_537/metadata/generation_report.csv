@@ -1,0 +1,536 @@
+function,description,level,success,attempts,code_length,code_file
+x,linear function,foundation,True,1,3423,code/foundation/x.py
+2*x,scaled linear,foundation,True,1,3408,code/foundation/2mulx.py
+3*x,triple linear,foundation,True,1,3419,code/foundation/3mulx.py
+-x,negative linear,foundation,True,1,3429,code/foundation/-x.py
+-2*x,negative scaled linear,foundation,True,1,3416,code/foundation/-2mulx.py
+x + 1,linear with constant,foundation,True,1,3426,code/foundation/x___1.py
+x + 3,linear shifted up,foundation,True,1,3426,code/foundation/x___3.py
+x - 2,linear shifted down,foundation,True,1,3441,code/foundation/x_-_2.py
+2*x + 1,scaled linear with constant,foundation,True,1,3416,code/foundation/2mulx___1.py
+3*x - 4,scaled linear shifted,foundation,True,1,3431,code/foundation/3mulx_-_4.py
+-x + 5,negative linear shifted,foundation,True,1,3432,code/foundation/-x___5.py
+0.5*x,half linear,foundation,True,1,3422,code/foundation/0_5mulx.py
+1.5*x,one and half linear,foundation,True,1,3408,code/foundation/1_5mulx.py
+x/2,linear divided,foundation,True,1,3448,code/foundation/xdiv2.py
+x/3,linear third,foundation,True,1,3448,code/foundation/xdiv3.py
+-x/2,negative half linear,foundation,True,1,3460,code/foundation/-xdiv2.py
+4*x,quadruple linear,foundation,True,1,3415,code/foundation/4mulx.py
+5*x,quintuple linear,foundation,True,1,3410,code/foundation/5mulx.py
+-3*x,negative triple linear,foundation,True,1,3416,code/foundation/-3mulx.py
+x + 10,linear large shift,foundation,True,1,3440,code/foundation/x___10.py
+x^2,basic quadratic,foundation,True,1,3438,code/foundation/xpow2.py
+2*x^2,scaled quadratic,foundation,True,1,3450,code/foundation/2mulxpow2.py
+3*x^2,triple quadratic,foundation,True,1,3456,code/foundation/3mulxpow2.py
+-x^2,negative quadratic,foundation,True,1,3446,code/foundation/-xpow2.py
+-2*x^2,negative scaled quadratic,foundation,True,1,3458,code/foundation/-2mulxpow2.py
+0.5*x^2,half quadratic,foundation,True,1,3457,code/foundation/0_5mulxpow2.py
+x^2 + 1,shifted quadratic,foundation,True,1,3454,code/foundation/xpow2___1.py
+x^2 + 2,quadratic shifted up 2,foundation,True,1,3453,code/foundation/xpow2___2.py
+x^2 + 5,quadratic shifted up 5,foundation,True,1,3453,code/foundation/xpow2___5.py
+x^2 - 1,shifted down quadratic,foundation,True,1,3454,code/foundation/xpow2_-_1.py
+x^2 - 4,quadratic shifted down 4,foundation,True,1,3450,code/foundation/xpow2_-_4.py
+x^2 + x,quadratic with linear,foundation,True,2,3462,code/foundation/xpow2___x.py
+x^2 + 2*x,quadratic with 2x,foundation,True,1,3471,code/foundation/xpow2___2mulx.py
+x^2 + 3*x,quadratic linear combo,foundation,True,1,3471,code/foundation/xpow2___3mulx.py
+x^2 - x,quadratic minus x,foundation,True,1,3467,code/foundation/xpow2_-_x.py
+x^2 - 2*x,quadratic minus 2x,foundation,True,1,3466,code/foundation/xpow2_-_2mulx.py
+x^2 + x + 1,complete quadratic 1,foundation,True,1,3451,code/foundation/xpow2___x___1.py
+x^2 + 3*x + 2,complete quadratic 2,foundation,True,1,3481,code/foundation/xpow2___3mulx___2.py
+x^2 + 4*x + 3,complete quadratic 3,foundation,True,1,3487,code/foundation/xpow2___4mulx___3.py
+x^2 - 5*x + 6,factored form quadratic,foundation,True,1,3474,code/foundation/xpow2_-_5mulx___6.py
+x^2 - 3*x + 2,factored quadratic 2,foundation,True,1,3485,code/foundation/xpow2_-_3mulx___2.py
+2*x^2 + 4*x,scaled quadratic with linear,foundation,True,1,3476,code/foundation/2mulxpow2___4mulx.py
+2*x^2 + x,scaled quadratic plus x,foundation,True,1,3476,code/foundation/2mulxpow2___x.py
+3*x^2 + 2*x,triple quadratic linear,foundation,True,1,3472,code/foundation/3mulxpow2___2mulx.py
+-x^2 + 4*x,negative quadratic linear,foundation,True,1,3472,code/foundation/-xpow2___4mulx.py
+x^2 + 4,quadratic shifted 4,foundation,True,1,3453,code/foundation/xpow2___4.py
+x^2 + 10,quadratic shifted 10,foundation,True,1,3452,code/foundation/xpow2___10.py
+x^2 - 9,quadratic shifted -9,foundation,True,1,3454,code/foundation/xpow2_-_9.py
+0.25*x^2,quarter quadratic,foundation,True,1,3469,code/foundation/0_25mulxpow2.py
+1.5*x^2,one-half quadratic,foundation,True,1,3462,code/foundation/1_5mulxpow2.py
+x^2/2,quadratic divided 2,foundation,False,3,0,
+x^2/4,quadratic divided 4,foundation,False,3,0,
+-x^2 + 1,inverted quadratic shifted,foundation,True,1,3456,code/foundation/-xpow2___1.py
+-x^2 + 5,inverted quadratic up 5,foundation,True,1,3460,code/foundation/-xpow2___5.py
+-2*x^2 + 4,inverted scaled quadratic,foundation,True,1,3469,code/foundation/-2mulxpow2___4.py
+2*x^2 - 3*x,scaled quad minus linear,foundation,True,1,3476,code/foundation/2mulxpow2_-_3mulx.py
+3*x^2 + x + 1,triple quad complete,foundation,True,1,3485,code/foundation/3mulxpow2___x___1.py
+x^2 + 5*x + 6,quad 5x plus 6,foundation,True,1,3499,code/foundation/xpow2___5mulx___6.py
+x^2 - 4*x + 4,perfect square,foundation,True,1,3474,code/foundation/xpow2_-_4mulx___4.py
+x^2 + 6*x + 9,perfect square 2,foundation,True,1,3482,code/foundation/xpow2___6mulx___9.py
+x^3,basic cubic,foundation,True,1,3497,code/foundation/xpow3.py
+2*x^3,scaled cubic,foundation,True,1,3462,code/foundation/2mulxpow3.py
+3*x^3,triple cubic,foundation,True,1,3459,code/foundation/3mulxpow3.py
+-x^3,negative cubic,foundation,True,1,3453,code/foundation/-xpow3.py
+-2*x^3,negative scaled cubic,foundation,True,1,3463,code/foundation/-2mulxpow3.py
+0.5*x^3,half cubic,foundation,True,1,3466,code/foundation/0_5mulxpow3.py
+x^3 + 1,cubic shifted,foundation,True,1,3462,code/foundation/xpow3___1.py
+x^3 - 1,cubic shifted down,foundation,True,1,3463,code/foundation/xpow3_-_1.py
+x^3 + x,cubic with linear,foundation,True,1,3470,code/foundation/xpow3___x.py
+x^3 - x,cubic minus linear,foundation,True,2,3470,code/foundation/xpow3_-_x.py
+x^3 + 2*x,cubic plus 2x,foundation,True,2,3480,code/foundation/xpow3___2mulx.py
+x^3 - 2*x,cubic minus 2x,foundation,True,1,3472,code/foundation/xpow3_-_2mulx.py
+x^3 + x^2,cubic with quadratic,foundation,True,1,3488,code/foundation/xpow3___xpow2.py
+x^3 + 2*x^2,cubic with 2x squared,foundation,True,1,3495,code/foundation/xpow3___2mulxpow2.py
+x^3 - x^2,cubic minus x squared,foundation,True,1,3489,code/foundation/xpow3_-_xpow2.py
+x^3 + x^2 + x,cubic quad linear,foundation,True,1,3514,code/foundation/xpow3___xpow2___x.py
+x^3 + x^2 - x,cubic quad minus x,foundation,True,2,3514,code/foundation/xpow3___xpow2_-_x.py
+x^3 - x^2 + x,cubic negative quad,foundation,True,2,3513,code/foundation/xpow3_-_xpow2___x.py
+x^3 + 2*x^2 + x,cubic 2quad linear,foundation,True,2,3516,code/foundation/xpow3___2mulxpow2___x.py
+2*x^3 + x,scaled cubic linear,foundation,True,1,3484,code/foundation/2mulxpow3___x.py
+2*x^3 - x,scaled cubic minus x,foundation,True,1,3477,code/foundation/2mulxpow3_-_x.py
+x^3 + 3*x^2 + 3*x + 1,cubic expansion,foundation,True,1,3532,code/foundation/xpow3___3mulxpow2___3mulx___1.py
+x^3 - 3*x^2 + 3*x - 1,negative cubic expansion,foundation,True,2,3529,code/foundation/xpow3_-_3mulxpow2___3mulx_-_1.py
+-x^3 + x,negative cubic plus x,foundation,True,1,3474,code/foundation/-xpow3___x.py
+x^3/2,cubic divided,foundation,True,1,3506,code/foundation/xpow3div2.py
+x^3 + 5,cubic shifted 5,foundation,True,1,3462,code/foundation/xpow3___5.py
+x^3 - 8,cubic shifted -8,foundation,True,1,3462,code/foundation/xpow3_-_8.py
+0.25*x^3,quarter cubic,foundation,True,1,3480,code/foundation/0_25mulxpow3.py
+1.5*x^3,one-half cubic,foundation,True,2,3475,code/foundation/1_5mulxpow3.py
+-x^3 + 2*x,negative cubic linear,foundation,True,1,3485,code/foundation/-xpow3___2mulx.py
+2*x^3 + x^2,scaled cubic quad,foundation,True,1,3497,code/foundation/2mulxpow3___xpow2.py
+3*x^3 - x^2,triple cubic quad,foundation,True,1,3489,code/foundation/3mulxpow3_-_xpow2.py
+x^3 + 4*x^2 + 4*x,cubic complete,foundation,True,1,3516,code/foundation/xpow3___4mulxpow2___4mulx.py
+x^3 - 6*x^2 + 9*x,cubic factored,foundation,True,2,3528,code/foundation/xpow3_-_6mulxpow2___9mulx.py
+x^3 + 3*x^2 - x,cubic mixed,foundation,True,1,3516,code/foundation/xpow3___3mulxpow2_-_x.py
+x^4,quartic function,foundation,True,1,3445,code/foundation/xpow4.py
+x^5,quintic function,foundation,True,1,3446,code/foundation/xpow5.py
+2*x^4,scaled quartic,foundation,True,1,3461,code/foundation/2mulxpow4.py
+-x^4,negative quartic,foundation,True,1,3451,code/foundation/-xpow4.py
+x^4 + 1,quartic shifted,foundation,True,1,3458,code/foundation/xpow4___1.py
+x^4 + x^2,even powers,foundation,True,1,3488,code/foundation/xpow4___xpow2.py
+x^4 - x^2,difference of even powers,foundation,True,1,3488,code/foundation/xpow4_-_xpow2.py
+x^4 + x,quartic linear,foundation,True,3,3469,code/foundation/xpow4___x.py
+x^4 - x,quartic minus x,foundation,True,1,3469,code/foundation/xpow4_-_x.py
+0.5*x^4,half quartic,foundation,True,1,3470,code/foundation/0_5mulxpow4.py
+0.25*x^4,quarter quartic,foundation,True,1,3469,code/foundation/0_25mulxpow4.py
+-2*x^4 + 4,inverted quartic,foundation,True,1,3474,code/foundation/-2mulxpow4___4.py
+x^5 + x,quintic linear,foundation,True,1,3559,code/foundation/xpow5___x.py
+x^5 - x,quintic minus x,foundation,True,1,3474,code/foundation/xpow5_-_x.py
+2*x^5,scaled quintic,foundation,True,1,3500,code/foundation/2mulxpow5.py
+-x^5,negative quintic,foundation,True,1,3613,code/foundation/-xpow5.py
+x^5 + x^3,quintic cubic,foundation,True,2,3497,code/foundation/xpow5___xpow3.py
+x^4 + x^3,quartic cubic combo,foundation,True,1,3495,code/foundation/xpow4___xpow3.py
+x^4 - x^3,quartic minus cubic,foundation,True,1,3537,code/foundation/xpow4_-_xpow3.py
+x^4 + 2*x^2,quartic 2x squared,foundation,True,1,3490,code/foundation/xpow4___2mulxpow2.py
+x^4 - 2*x^2,quartic minus 2x squared,foundation,True,1,3491,code/foundation/xpow4_-_2mulxpow2.py
+x^5 + x^2,quintic quadratic,foundation,True,1,3622,code/foundation/xpow5___xpow2.py
+x^5 - x^2,quintic minus quadratic,foundation,True,1,3490,code/foundation/xpow5_-_xpow2.py
+x^4 + x^2 + 1,quartic complete,foundation,True,1,3504,code/foundation/xpow4___xpow2___1.py
+x^5 + x^3 + x,quintic odd powers,foundation,True,1,3556,code/foundation/xpow5___xpow3___x.py
+2*x^4 + x^2,scaled quartic quad,foundation,True,2,3498,code/foundation/2mulxpow4___xpow2.py
+-x^4 + x^2,negative quartic quad,foundation,True,1,3494,code/foundation/-xpow4___xpow2.py
+x^4/2,quartic divided,foundation,False,3,0,
+x^5/2,quintic divided,foundation,True,1,3504,code/foundation/xpow5div2.py
+0.5*x^5,half quintic,foundation,True,1,3476,code/foundation/0_5mulxpow5.py
+-2*x^5,negative scaled quintic,foundation,True,1,3472,code/foundation/-2mulxpow5.py
+x^4 + 4*x^2 + 4,quartic perfect,foundation,True,1,3501,code/foundation/xpow4___4mulxpow2___4.py
+x^4 - 4*x^2 + 3,quartic factored,foundation,True,1,3510,code/foundation/xpow4_-_4mulxpow2___3.py
+x^5 + 5*x^3 + 4*x,quintic expanded,foundation,True,1,3667,code/foundation/xpow5___5mulxpow3___4mulx.py
+x^6,sixth power,foundation,True,1,3665,code/foundation/xpow6.py
+sin(x),sine function,conceptual,True,1,3441,code/conceptual/sin_x_.py
+cos(x),cosine function,conceptual,True,1,3445,code/conceptual/cos_x_.py
+tan(x),tangent function,conceptual,True,1,3456,code/conceptual/tan_x_.py
+2*sin(x),scaled sine,conceptual,True,1,3481,code/conceptual/2mulsin_x_.py
+3*sin(x),triple sine,conceptual,True,1,3453,code/conceptual/3mulsin_x_.py
+-sin(x),negative sine,conceptual,True,1,3448,code/conceptual/-sin_x_.py
+-2*sin(x),negative scaled sine,conceptual,True,1,3459,code/conceptual/-2mulsin_x_.py
+0.5*sin(x),half sine,conceptual,True,1,3475,code/conceptual/0_5mulsin_x_.py
+sin(x) + 1,shifted sine up,conceptual,True,1,3463,code/conceptual/sin_x____1.py
+sin(x) + 2,shifted sine up 2,conceptual,True,1,3458,code/conceptual/sin_x____2.py
+sin(x) - 1,shifted sine down,conceptual,True,1,3461,code/conceptual/sin_x__-_1.py
+cos(x) + 1,shifted cosine up,conceptual,True,1,3465,code/conceptual/cos_x____1.py
+cos(x) + 2,shifted cosine up 2,conceptual,True,1,3464,code/conceptual/cos_x____2.py
+cos(x) - 1,shifted cosine down,conceptual,True,1,3469,code/conceptual/cos_x__-_1.py
+2*cos(x),scaled cosine,conceptual,True,1,3473,code/conceptual/2mulcos_x_.py
+3*cos(x),triple cosine,conceptual,True,1,3459,code/conceptual/3mulcos_x_.py
+-cos(x),negative cosine,conceptual,True,1,3449,code/conceptual/-cos_x_.py
+-2*cos(x),negative scaled cosine,conceptual,True,1,3465,code/conceptual/-2mulcos_x_.py
+0.5*cos(x),half cosine,conceptual,True,1,3476,code/conceptual/0_5mulcos_x_.py
+tan(x) + 1,shifted tangent,conceptual,True,2,3470,code/conceptual/tan_x____1.py
+2*tan(x),scaled tangent,conceptual,True,1,3466,code/conceptual/2multan_x_.py
+-tan(x),negative tangent,conceptual,True,1,3631,code/conceptual/-tan_x_.py
+sin(x)/2,sine divided,conceptual,True,1,3492,code/conceptual/sin_x_div2.py
+cos(x)/2,cosine divided,conceptual,True,1,3496,code/conceptual/cos_x_div2.py
+sin(x) + 3,sine shifted 3,conceptual,True,1,3458,code/conceptual/sin_x____3.py
+cos(x) + 3,cosine shifted 3,conceptual,True,1,3460,code/conceptual/cos_x____3.py
+-sin(x) + 1,negative sine shifted,conceptual,True,1,3486,code/conceptual/-sin_x____1.py
+-cos(x) + 1,negative cosine shifted,conceptual,True,1,3465,code/conceptual/-cos_x____1.py
+1.5*sin(x),one-half sine,conceptual,True,1,3473,code/conceptual/1_5mulsin_x_.py
+1.5*cos(x),one-half cosine,conceptual,True,1,3474,code/conceptual/1_5mulcos_x_.py
+sin(2*x),compressed sine,conceptual,True,1,3491,code/conceptual/sin_2mulx_.py
+sin(3*x),triple frequency sine,conceptual,True,1,3488,code/conceptual/sin_3mulx_.py
+sin(x/2),stretched sine,conceptual,True,1,3504,code/conceptual/sin_xdiv2_.py
+sin(x/3),third frequency sine,conceptual,True,1,3599,code/conceptual/sin_xdiv3_.py
+cos(2*x),compressed cosine,conceptual,True,1,3477,code/conceptual/cos_2mulx_.py
+cos(3*x),triple frequency cosine,conceptual,True,1,3488,code/conceptual/cos_3mulx_.py
+cos(x/2),stretched cosine,conceptual,True,1,3514,code/conceptual/cos_xdiv2_.py
+cos(x/3),third frequency cosine,conceptual,True,1,3521,code/conceptual/cos_xdiv3_.py
+sin(4*x),quad frequency sine,conceptual,True,1,3484,code/conceptual/sin_4mulx_.py
+cos(4*x),quad frequency cosine,conceptual,True,1,3488,code/conceptual/cos_4mulx_.py
+sin(0.5*x),half frequency sine,conceptual,True,1,3511,code/conceptual/sin_0_5mulx_.py
+cos(0.5*x),half frequency cosine,conceptual,True,1,3510,code/conceptual/cos_0_5mulx_.py
+2*sin(2*x),scaled compressed sine,conceptual,True,1,3499,code/conceptual/2mulsin_2mulx_.py
+2*cos(2*x),scaled compressed cosine,conceptual,True,1,3515,code/conceptual/2mulcos_2mulx_.py
+sin(2*x) + 1,compressed sine shifted,conceptual,True,1,3495,code/conceptual/sin_2mulx____1.py
+cos(2*x) + 1,compressed cosine shifted,conceptual,True,1,3504,code/conceptual/cos_2mulx____1.py
+-sin(2*x),negative compressed sine,conceptual,True,1,3477,code/conceptual/-sin_2mulx_.py
+-cos(2*x),negative compressed cosine,conceptual,True,1,3499,code/conceptual/-cos_2mulx_.py
+sin(x/2) + 1,stretched sine shifted,conceptual,True,1,3527,code/conceptual/sin_xdiv2____1.py
+cos(x/2) + 1,stretched cosine shifted,conceptual,True,1,3530,code/conceptual/cos_xdiv2____1.py
+3*sin(3*x),triple scaled compressed,conceptual,True,1,3499,code/conceptual/3mulsin_3mulx_.py
+tan(2*x),compressed tangent,conceptual,True,1,3501,code/conceptual/tan_2mulx_.py
+tan(x/2),stretched tangent,conceptual,True,1,3569,code/conceptual/tan_xdiv2_.py
+sin(5*x),fifth frequency sine,conceptual,True,1,3493,code/conceptual/sin_5mulx_.py
+cos(5*x),fifth frequency cosine,conceptual,True,1,3534,code/conceptual/cos_5mulx_.py
+e^x,exponential function,conceptual,True,1,3425,code/conceptual/epowx.py
+2*e^x,scaled exponential,conceptual,True,1,3439,code/conceptual/2mulepowx.py
+3*e^x,triple exponential,conceptual,True,1,3437,code/conceptual/3mulepowx.py
+-e^x,negative exponential,conceptual,True,1,3433,code/conceptual/-epowx.py
+e^x + 1,exponential shifted,conceptual,True,1,3462,code/conceptual/epowx___1.py
+e^x - 1,exponential shifted down,conceptual,True,1,3462,code/conceptual/epowx_-_1.py
+e^(2*x),fast exponential,conceptual,True,1,3481,code/conceptual/epow_2mulx_.py
+e^(3*x),triple rate exponential,conceptual,True,1,3447,code/conceptual/epow_3mulx_.py
+e^(x/2),slow exponential,conceptual,True,1,3506,code/conceptual/epow_xdiv2_.py
+e^(-x),decay exponential,conceptual,True,1,3458,code/conceptual/epow_-x_.py
+e^(-2*x),fast decay,conceptual,True,1,3600,code/conceptual/epow_-2mulx_.py
+2*e^(-x),scaled decay,conceptual,True,1,3501,code/conceptual/2mulepow_-x_.py
+e^x/2,exponential divided,conceptual,True,1,3468,code/conceptual/epowxdiv2.py
+-2*e^x,negative scaled exponential,conceptual,True,1,3459,code/conceptual/-2mulepowx.py
+e^x + 2,exponential shifted 2,conceptual,True,1,3455,code/conceptual/epowx___2.py
+e^x - 2,exponential shifted -2,conceptual,True,1,3450,code/conceptual/epowx_-_2.py
+0.5*e^x,half exponential,conceptual,True,1,3466,code/conceptual/0_5mulepowx.py
+1.5*e^x,one-half exponential,conceptual,True,1,3464,code/conceptual/1_5mulepowx.py
+e^(x + 1),exponential phase shift,conceptual,True,1,3453,code/conceptual/epow_x___1_.py
+e^(x - 1),exponential phase shift 2,conceptual,True,1,3477,code/conceptual/epow_x_-_1_.py
+3*e^(2*x),triple fast exponential,conceptual,True,1,3613,code/conceptual/3mulepow_2mulx_.py
+e^(-x/2),slow decay,conceptual,True,1,3506,code/conceptual/epow_-xdiv2_.py
+2*e^(x/2),scaled slow exponential,conceptual,True,1,3488,code/conceptual/2mulepow_xdiv2_.py
+-e^(-x),negative decay,conceptual,True,1,3480,code/conceptual/-epow_-x_.py
+e^(0.5*x),half rate exponential,conceptual,True,1,3468,code/conceptual/epow_0_5mulx_.py
+ln(x),natural logarithm,conceptual,True,1,3444,code/conceptual/ln_x_.py
+log(x),logarithm base 10,conceptual,True,1,3444,code/conceptual/log_x_.py
+2*ln(x),scaled logarithm,conceptual,True,1,3492,code/conceptual/2mulln_x_.py
+3*ln(x),triple logarithm,conceptual,True,1,3460,code/conceptual/3mulln_x_.py
+-ln(x),negative logarithm,conceptual,True,1,3578,code/conceptual/-ln_x_.py
+ln(x) + 1,shifted logarithm,conceptual,True,1,3460,code/conceptual/ln_x____1.py
+ln(x) - 1,log shifted down,conceptual,True,1,3553,code/conceptual/ln_x__-_1.py
+ln(x + 1),shifted log input,conceptual,True,1,3527,code/conceptual/ln_x___1_.py
+ln(x + 2),log input shifted 2,conceptual,True,1,3495,code/conceptual/ln_x___2_.py
+ln(2*x),log of scaled x,conceptual,True,1,3593,code/conceptual/ln_2mulx_.py
+ln(x/2),log of half x,conceptual,True,1,3493,code/conceptual/ln_xdiv2_.py
+ln(x) + 2,log shifted 2,conceptual,True,1,3462,code/conceptual/ln_x____2.py
+ln(x) - 2,log shifted -2,conceptual,True,1,3462,code/conceptual/ln_x__-_2.py
+0.5*ln(x),half logarithm,conceptual,True,1,3486,code/conceptual/0_5mulln_x_.py
+-2*ln(x),negative scaled log,conceptual,True,1,3586,code/conceptual/-2mulln_x_.py
+ln(x + 3),log shifted input 3,conceptual,True,1,3497,code/conceptual/ln_x___3_.py
+ln(3*x),log of triple x,conceptual,True,1,3630,code/conceptual/ln_3mulx_.py
+1.5*ln(x),one-half logarithm,conceptual,True,2,3493,code/conceptual/1_5mulln_x_.py
+ln(x)/2,log divided,conceptual,True,1,3490,code/conceptual/ln_x_div2.py
+2*ln(x + 1),scaled shifted log,conceptual,True,2,3559,code/conceptual/2mulln_x___1_.py
+sqrt(x),square root,conceptual,True,1,3498,code/conceptual/sqrt_x_.py
+2*sqrt(x),scaled square root,conceptual,True,1,3689,code/conceptual/2mulsqrt_x_.py
+-sqrt(x),negative square root,conceptual,True,1,3497,code/conceptual/-sqrt_x_.py
+sqrt(x) + 1,shifted square root,conceptual,True,1,3582,code/conceptual/sqrt_x____1.py
+sqrt(x + 1),shifted root input,conceptual,True,1,3616,code/conceptual/sqrt_x___1_.py
+sqrt(x + 2),root input shifted 2,conceptual,True,1,3596,code/conceptual/sqrt_x___2_.py
+sqrt(2*x),scaled root input,conceptual,True,1,3529,code/conceptual/sqrt_2mulx_.py
+sqrt(x/2),root of half x,conceptual,True,1,3731,code/conceptual/sqrt_xdiv2_.py
+sqrt(x) - 1,root shifted down,conceptual,True,1,3680,code/conceptual/sqrt_x__-_1.py
+0.5*sqrt(x),half square root,conceptual,True,1,3514,code/conceptual/0_5mulsqrt_x_.py
+1.5*sqrt(x),one-half square root,conceptual,True,1,3654,code/conceptual/1_5mulsqrt_x_.py
+sqrt(x + 3),root shifted 3,conceptual,True,1,3528,code/conceptual/sqrt_x___3_.py
+sqrt(3*x),root of triple x,conceptual,True,1,3522,code/conceptual/sqrt_3mulx_.py
+1/x,reciprocal function,conceptual,True,3,3465,code/conceptual/1divx.py
+2/x,scaled reciprocal,conceptual,True,2,3468,code/conceptual/2divx.py
+3/x,triple reciprocal,conceptual,True,2,3465,code/conceptual/3divx.py
+-1/x,negative reciprocal,conceptual,True,3,3469,code/conceptual/-1divx.py
+1/(x + 1),shifted reciprocal,conceptual,True,1,3497,code/conceptual/1div_x___1_.py
+1/(x - 1),reciprocal x minus 1,conceptual,True,2,3508,code/conceptual/1div_x_-_1_.py
+1/(2*x),reciprocal of 2x,conceptual,True,1,3495,code/conceptual/1div_2mulx_.py
+1/x^2,inverse square,conceptual,True,3,3472,code/conceptual/1divxpow2.py
+2/x^2,scaled inverse square,conceptual,True,2,3480,code/conceptual/2divxpow2.py
+1/x^3,inverse cube,conceptual,False,3,0,
+-2/x,negative scaled reciprocal,conceptual,True,1,3475,code/conceptual/-2divx.py
+1/(x + 2),reciprocal shifted 2,conceptual,True,1,3498,code/conceptual/1div_x___2_.py
+2/(x + 1),scaled shifted reciprocal,conceptual,True,2,3513,code/conceptual/2div_x___1_.py
+1/sqrt(x),reciprocal square root,conceptual,True,1,3506,code/conceptual/1divsqrt_x_.py
+x*sin(x),product polynomial trig,conceptual,True,1,3495,code/conceptual/xmulsin_x_.py
+x*cos(x),product with cosine,conceptual,True,1,3495,code/conceptual/xmulcos_x_.py
+2*x*sin(x),scaled x sine,conceptual,True,1,3513,code/conceptual/2mulxmulsin_x_.py
+x*tan(x),x times tangent,conceptual,True,1,3510,code/conceptual/xmultan_x_.py
+-x*sin(x),negative x sine,conceptual,True,1,3501,code/conceptual/-xmulsin_x_.py
+x*sin(2*x),x sine compressed,conceptual,True,1,3521,code/conceptual/xmulsin_2mulx_.py
+x*cos(2*x),x cosine compressed,conceptual,True,1,3519,code/conceptual/xmulcos_2mulx_.py
+x^2*sin(x),quadratic times sine,conceptual,True,1,3533,code/conceptual/xpow2mulsin_x_.py
+x^2*cos(x),quadratic times cosine,conceptual,True,1,3524,code/conceptual/xpow2mulcos_x_.py
+2*x^2*sin(x),scaled quad sine,conceptual,True,1,3541,code/conceptual/2mulxpow2mulsin_x_.py
+-x^2*sin(x),negative quad sine,conceptual,True,1,3534,code/conceptual/-xpow2mulsin_x_.py
+x^2*sin(2*x),quad sine compressed,conceptual,True,1,3541,code/conceptual/xpow2mulsin_2mulx_.py
+sin(x)*cos(x),product of trig,conceptual,True,1,3496,code/conceptual/sin_x_mulcos_x_.py
+sin(x)*sin(2*x),sine product,conceptual,True,1,3581,code/conceptual/sin_x_mulsin_2mulx_.py
+cos(x)*cos(2*x),cosine product,conceptual,True,1,3586,code/conceptual/cos_x_mulcos_2mulx_.py
+x*e^x,linear exponential product,conceptual,True,1,3477,code/conceptual/xmulepowx.py
+2*x*e^x,scaled x exponential,conceptual,True,1,3540,code/conceptual/2mulxmulepowx.py
+-x*e^x,negative x exponential,conceptual,True,1,3478,code/conceptual/-xmulepowx.py
+x*e^(2*x),x fast exponential,conceptual,True,1,3600,code/conceptual/xmulepow_2mulx_.py
+x*e^(-x),x decay,conceptual,True,1,3481,code/conceptual/xmulepow_-x_.py
+x*ln(x),x times logarithm,conceptual,True,1,3555,code/conceptual/xmulln_x_.py
+2*x*ln(x),scaled x log,conceptual,True,1,3485,code/conceptual/2mulxmulln_x_.py
+x^2*e^x,quad exponential,conceptual,True,1,3512,code/conceptual/xpow2mulepowx.py
+x*sqrt(x),x times root,conceptual,True,1,3668,code/conceptual/xmulsqrt_x_.py
+x/sin(x),x over sine,conceptual,True,1,3846,code/conceptual/xdivsin_x_.py
+sin(x)/cos(x),tangent form,conceptual,True,1,3546,code/conceptual/sin_x_divcos_x_.py
+x*sin(x)*cos(x),x sine cosine,conceptual,True,1,3569,code/conceptual/xmulsin_x_mulcos_x_.py
+x^2*tan(x),quad tangent,conceptual,True,1,3695,code/conceptual/xpow2multan_x_.py
+-x*cos(x),negative x cosine,conceptual,True,1,3501,code/conceptual/-xmulcos_x_.py
+x*sin(x/2),x stretched sine,conceptual,True,1,3539,code/conceptual/xmulsin_xdiv2_.py
+x^3 - 3*x^2 + 2,cubic optimization,application,True,1,3501,code/application/xpow3_-_3mulxpow2___2.py
+x^3 + 2*x^2 - 5*x,cubic with roots,application,True,1,3516,code/application/xpow3___2mulxpow2_-_5mulx.py
+x^4 - 4*x^2,quartic optimization,application,True,1,3492,code/application/xpow4_-_4mulxpow2.py
+x^4 - 8*x^2 + 16,quartic critical,application,True,1,3507,code/application/xpow4_-_8mulxpow2___16.py
+x^3 - 12*x,cubic simple roots,application,True,1,3480,code/application/xpow3_-_12mulx.py
+x^3 + 3*x^2 - 9*x,cubic inflection,application,True,1,3517,code/application/xpow3___3mulxpow2_-_9mulx.py
+2*x^3 - 9*x^2 + 12*x,scaled cubic opt,application,True,1,3530,code/application/2mulxpow3_-_9mulxpow2___12mulx.py
+x^4 - 2*x^2 + 1,quartic perfect,application,True,1,3508,code/application/xpow4_-_2mulxpow2___1.py
+x^3 - 3*x + 2,cubic standard form,application,True,1,3495,code/application/xpow3_-_3mulx___2.py
+-x^3 + 3*x^2,negative cubic opt,application,True,1,3500,code/application/-xpow3___3mulxpow2.py
+x^4 + 4*x^3,quartic cubic mix,application,True,1,3562,code/application/xpow4___4mulxpow3.py
+x^3 - x^2 - x + 1,cubic factored,application,True,1,3525,code/application/xpow3_-_xpow2_-_x___1.py
+x^4 - 5*x^2 + 4,quartic factored,application,True,1,3513,code/application/xpow4_-_5mulxpow2___4.py
+2*x^3 - 3*x^2 - 12*x,scaled cubic,application,True,1,3521,code/application/2mulxpow3_-_3mulxpow2_-_12mulx.py
+x^3 + x^2 - 2*x,cubic roots,application,True,1,3518,code/application/xpow3___xpow2_-_2mulx.py
+x^4 - x^2 - 6,quartic simple,application,True,1,3497,code/application/xpow4_-_xpow2_-_6.py
+-x^3 + 6*x^2 - 9*x,negative cubic crit,application,True,1,3526,code/application/-xpow3___6mulxpow2_-_9mulx.py
+x^3 - 4*x,cubic two roots,application,True,1,3477,code/application/xpow3_-_4mulx.py
+x^4 - 3*x^2 + 2,quartic two pairs,application,True,2,3510,code/application/xpow4_-_3mulxpow2___2.py
+x^3 + 6*x^2 + 9*x,cubic derivative,application,True,1,3519,code/application/xpow3___6mulxpow2___9mulx.py
+x^4 + 2*x^2 + 1,quartic sum,application,True,1,3513,code/application/xpow4___2mulxpow2___1.py
+x^3 - 9*x,cubic simple,application,True,1,3474,code/application/xpow3_-_9mulx.py
+2*x^3 - 6*x,scaled cubic roots,application,True,1,3497,code/application/2mulxpow3_-_6mulx.py
+-x^4 + 4*x^2,negative quartic,application,True,1,3497,code/application/-xpow4___4mulxpow2.py
+x^4 - 4*x^3 + 4*x^2,quartic perfect 2,application,True,1,3545,code/application/xpow4_-_4mulxpow3___4mulxpow2.py
+x^3 - 2*x^2 + x,cubic factored 2,application,True,1,3518,code/application/xpow3_-_2mulxpow2___x.py
+x^3 - 27,cubic shift large,application,True,1,3466,code/application/xpow3_-_27.py
+x^2*e^x,product rule example,application,True,1,3505,code/application/xpow2mulepowx.py
+x^3*e^x,cubic exponential product,application,True,1,3548,code/application/xpow3mulepowx.py
+x^4*e^x,quartic exponential,application,True,1,3524,code/application/xpow4mulepowx.py
+x*e^(2*x),x fast exponential,application,True,1,3500,code/application/xmulepow_2mulx_.py
+x^2*e^(2*x),quad fast exponential,application,True,1,3668,code/application/xpow2mulepow_2mulx_.py
+x^2*e^(-x),quad decay,application,True,1,3510,code/application/xpow2mulepow_-x_.py
+x^3*e^(-x),cubic decay,application,True,1,3511,code/application/xpow3mulepow_-x_.py
+x^2*ln(x),quadratic log product,application,True,1,3533,code/application/xpow2mulln_x_.py
+x^3*ln(x),cubic log product,application,True,1,3734,code/application/xpow3mulln_x_.py
+x*ln(x)^2,x log squared,application,True,1,3520,code/application/xmulln_x_pow2.py
+x^2*sin(x),quadratic sine product,application,True,1,3530,code/application/xpow2mulsin_x_.py
+x^2*cos(x),quadratic cosine product,application,True,1,3528,code/application/xpow2mulcos_x_.py
+x^3*sin(x),cubic trig product,application,True,1,3542,code/application/xpow3mulsin_x_.py
+x^3*cos(x),cubic cosine product,application,True,1,3543,code/application/xpow3mulcos_x_.py
+x*sin(x)*cos(x),triple product,application,True,1,3574,code/application/xmulsin_x_mulcos_x_.py
+x^2*sin(2*x),quad compressed sine,application,True,1,3548,code/application/xpow2mulsin_2mulx_.py
+x^2*cos(2*x),quad compressed cosine,application,True,1,3541,code/application/xpow2mulcos_2mulx_.py
+x*cos(2*x),linear compressed cosine,application,True,1,3522,code/application/xmulcos_2mulx_.py
+x*tan(x),x tangent product,application,True,1,3512,code/application/xmultan_x_.py
+x^2*tan(x),quad tangent product,application,True,1,3643,code/application/xpow2multan_x_.py
+x*e^x*sin(x),x exp sine,application,True,1,3587,code/application/xmulepowxmulsin_x_.py
+x^2*e^x*cos(x),quad exp cosine,application,True,1,3583,code/application/xpow2mulepowxmulcos_x_.py
+x*ln(x)*sin(x),x log sine,application,True,1,3602,code/application/xmulln_x_mulsin_x_.py
+2*x^2*e^x,scaled quad exp,application,True,1,3500,code/application/2mulxpow2mulepowx.py
+3*x*e^(2*x),scaled x fast exp,application,True,2,3591,code/application/3mulxmulepow_2mulx_.py
+-x^2*e^x,negative quad exp,application,True,1,3502,code/application/-xpow2mulepowx.py
+x^2*e^x*sin(x),quad exp sine,application,True,1,3599,code/application/xpow2mulepowxmulsin_x_.py
+x*e^(-x)*cos(x),x decay cosine,application,True,1,3590,code/application/xmulepow_-x_mulcos_x_.py
+x^3*e^(-2*x),cubic fast decay,application,True,1,3532,code/application/xpow3mulepow_-2mulx_.py
+x^2*sin(x)*cos(x),quad sine cosine,application,True,1,3560,code/application/xpow2mulsin_x_mulcos_x_.py
+x^4*ln(x),quartic log,application,True,1,3539,code/application/xpow4mulln_x_.py
+x*sqrt(x)*sin(x),x root sine,application,True,1,3626,code/application/xmulsqrt_x_mulsin_x_.py
+x^2*sqrt(x),quad root,application,True,1,3640,code/application/xpow2mulsqrt_x_.py
+x^3/e^x,cubic over exp,application,True,1,3553,code/application/xpow3divepowx.py
+x^2*ln(2*x),quad scaled log,application,True,1,3512,code/application/xpow2mulln_2mulx_.py
+sin(x)/x,quotient with trig,application,True,1,3574,code/application/sin_x_divx.py
+x/sin(x),reciprocal sinc,application,True,1,3861,code/application/xdivsin_x_.py
+cos(x)/x,cosine over x,application,True,2,3586,code/application/cos_x_divx.py
+x/cos(x),x over cosine,application,True,1,3590,code/application/xdivcos_x_.py
+e^x/x,exponential over x,application,True,3,3535,code/application/epowxdivx.py
+x/e^x,x over exponential,application,True,1,3539,code/application/xdivepowx.py
+ln(x)/x,log over x,application,True,1,3554,code/application/ln_x_divx.py
+x/ln(x),x over log,application,True,1,3817,code/application/xdivln_x_.py
+x^2/e^x,quadratic over exp,application,False,3,0,
+e^x/x^2,exp over quadratic,application,True,1,3735,code/application/epowxdivxpow2.py
+sin(x)/cos(x),tangent quotient,application,True,2,3546,code/application/sin_x_divcos_x_.py
+cos(x)/sin(x),cotangent,application,True,1,3559,code/application/cos_x_divsin_x_.py
+x^2/sin(x),quad over sine,application,True,2,3829,code/application/xpow2divsin_x_.py
+sin(x)/x^2,sine over quad,application,True,1,3685,code/application/sin_x_divxpow2.py
+x^3/e^x,cubic over exp,application,True,1,3553,code/application/xpow3divepowx.py
+e^x/x^3,exp over cubic,application,True,1,3574,code/application/epowxdivxpow3.py
+tan(x)/x,tangent over x,application,True,3,3585,code/application/tan_x_divx.py
+x/tan(x),x over tangent,application,True,1,4469,code/application/xdivtan_x_.py
+x^2/ln(x),quad over log,application,True,1,3784,code/application/xpow2divln_x_.py
+ln(x)/x^2,log over quad,application,True,1,3542,code/application/ln_x_divxpow2.py
+e^x/(x + 1),exp over linear,application,True,2,3557,code/application/epowxdiv_x___1_.py
+(x + 1)/e^x,linear over exp,application,True,1,3530,code/application/_x___1_divepowx.py
+sin(x)/(x + 1),sine over linear,application,True,1,3610,code/application/sin_x_div_x___1_.py
+x^2/(x + 1),quad over linear,application,False,3,0,
+x^3/(x^2 + 1),cubic over quad plus,application,True,1,3580,code/application/xpow3div_xpow2___1_.py
+(x^2 + 1)/x,quad plus over x,application,True,1,3518,code/application/_xpow2___1_divx.py
+x/(x^2 + 1),rational with denom,application,True,1,3564,code/application/xdiv_xpow2___1_.py
+x^2/(x^2 + 1),bounded rational,application,True,2,3566,code/application/xpow2div_xpow2___1_.py
+e^x/(x^2 + 1),exp over quad plus,application,True,1,3613,code/application/epowxdiv_xpow2___1_.py
+sin(x)/(x^2 + 1),sine over quad plus,application,True,1,3626,code/application/sin_x_div_xpow2___1_.py
+sin(x^2),sine of square,application,True,1,3516,code/application/sin_xpow2_.py
+cos(x^2),cosine of square,application,True,1,3512,code/application/cos_xpow2_.py
+e^(sin(x)),exponential of sine,application,True,1,3527,code/application/epow_sin_x__.py
+e^(cos(x)),exponential of cosine,application,True,1,3531,code/application/epow_cos_x__.py
+ln(sin(x)),log of sine,application,True,1,4011,code/application/ln_sin_x__.py
+ln(cos(x)),log of cosine,application,True,1,3902,code/application/ln_cos_x__.py
+sin(e^x),sine of exponential,application,True,1,3528,code/application/sin_epowx_.py
+cos(e^x),cosine of exponential,application,True,1,3520,code/application/cos_epowx_.py
+sin(ln(x)),sine of log,application,True,1,3852,code/application/sin_ln_x__.py
+cos(ln(x)),cosine of log,application,True,1,3554,code/application/cos_ln_x__.py
+e^(x^2),exp of square,application,True,1,3688,code/application/epow_xpow2_.py
+ln(x^2),logarithm composition,application,True,2,3469,code/application/ln_xpow2_.py
+ln(x^2 + 1),log of sum,application,True,1,3530,code/application/ln_xpow2___1_.py
+ln(x^2 + 2),log of quad plus 2,application,True,1,3541,code/application/ln_xpow2___2_.py
+e^(2*x^2),exp of scaled square,application,True,1,3606,code/application/epow_2mulxpow2_.py
+sin(sqrt(x)),sine of root,application,True,1,3572,code/application/sin_sqrt_x__.py
+cos(sqrt(x)),cosine of root,application,True,1,3567,code/application/cos_sqrt_x__.py
+sqrt(sin(x)),root of sine,application,True,1,3590,code/application/sqrt_sin_x__.py
+sqrt(cos(x)),root of cosine,application,True,1,3569,code/application/sqrt_cos_x__.py
+sqrt(e^x),root of exponential,application,True,1,3509,code/application/sqrt_epowx_.py
+sqrt(ln(x)),root of log,application,True,1,3568,code/application/sqrt_ln_x__.py
+ln(e^x + 1),log exp sum,application,True,2,3510,code/application/ln_epowx___1_.py
+e^(ln(x)),exp of log,application,True,1,3516,code/application/epow_ln_x__.py
+sin(2*x^2),sine of scaled square,application,True,1,3521,code/application/sin_2mulxpow2_.py
+cos(3*x^2),cosine triple square,application,True,1,3523,code/application/cos_3mulxpow2_.py
+e^(x^2 + x),exp of quad linear,application,True,1,3512,code/application/epow_xpow2___x_.py
+ln(x^2 + x),log of quad linear,application,True,1,3535,code/application/ln_xpow2___x_.py
+sin(x^3),sine of cube,application,True,1,3671,code/application/sin_xpow3_.py
+cos(x^3),cosine of cube,application,True,1,3511,code/application/cos_xpow3_.py
+e^(x^3),exp of cube,application,True,1,3626,code/application/epow_xpow3_.py
+ln(x^3),log of cube,application,True,2,3589,code/application/ln_xpow3_.py
+sqrt(x^2 + 1),root of quad plus,application,True,1,3527,code/application/sqrt_xpow2___1_.py
+sqrt(x^2 + 4),shifted radical composition,application,True,1,3539,code/application/sqrt_xpow2___4_.py
+sqrt(1 + x^2),composition with radical,application,True,1,3542,code/application/sqrt_1___xpow2_.py
+ln(sqrt(x)),log of root,application,True,1,3562,code/application/ln_sqrt_x__.py
+sin(x) + cos(x),sum of trig,application,True,1,3506,code/application/sin_x____cos_x_.py
+sin(x) - cos(x),difference of trig,application,True,1,3542,code/application/sin_x__-_cos_x_.py
+e^x + e^(-x),hyperbolic cosine,application,True,1,3497,code/application/epowx___epow_-x_.py
+e^x - e^(-x),hyperbolic sine,application,True,1,3513,code/application/epowx_-_epow_-x_.py
+sin(x) + x,sine plus x,application,True,1,3497,code/application/sin_x____x.py
+cos(x) + x,cosine plus x,application,True,1,3468,code/application/cos_x____x.py
+e^x + x,exp plus x,application,True,1,3482,code/application/epowx___x.py
+ln(x) + x,log plus x,application,True,1,3472,code/application/ln_x____x.py
+sin(x) + e^x,sine plus exp,application,True,1,3500,code/application/sin_x____epowx.py
+cos(x) + ln(x),cosine plus log,application,True,1,3642,code/application/cos_x____ln_x_.py
+x^2 + sin(x),quad plus sine,application,True,1,3482,code/application/xpow2___sin_x_.py
+x^2 + e^x,quad plus exp,application,True,1,3488,code/application/xpow2___epowx.py
+x^3 + ln(x),cubic plus log,application,True,1,3555,code/application/xpow3___ln_x_.py
+sin(x)*e^x,sine exponential product,application,True,1,3547,code/application/sin_x_mulepowx.py
+cos(x)*e^x,cosine exponential product,application,True,1,3537,code/application/cos_x_mulepowx.py
+sin(x)*ln(x),sine log product,application,True,1,3552,code/application/sin_x_mulln_x_.py
+cos(x)*ln(x),cosine log product,application,True,1,3602,code/application/cos_x_mulln_x_.py
+tan(x)*x,tangent linear product,application,True,1,3713,code/application/tan_x_mulx.py
+e^(-x)*sin(x),damped oscillation,application,True,1,3545,code/application/epow_-x_mulsin_x_.py
+e^(-x)*cos(x),damped cosine,application,True,1,3548,code/application/epow_-x_mulcos_x_.py
+x*sin(x) + cos(x),x sine plus cosine,application,True,1,3511,code/application/xmulsin_x____cos_x_.py
+x*cos(x) - sin(x),x cosine minus sine,application,True,1,3520,code/application/xmulcos_x__-_sin_x_.py
+e^x*sin(x),exp sine product,application,True,1,3538,code/application/epowxmulsin_x_.py
+e^x*cos(x),exp cosine product,application,True,1,3534,code/application/epowxmulcos_x_.py
+ln(x)*sin(x),log sine product,application,True,1,3549,code/application/ln_x_mulsin_x_.py
+sqrt(x)*sin(x),root sine product,application,True,1,3602,code/application/sqrt_x_mulsin_x_.py
+x^2 + x*sin(x),quad plus x sine,application,True,1,3528,code/application/xpow2___xmulsin_x_.py
+x^3 - x*cos(x),cubic minus x cosine,application,True,1,3541,code/application/xpow3_-_xmulcos_x_.py
+e^(-x^2),gaussian function,application,True,1,3507,code/application/epow_-xpow2_.py
+x*e^(-x^2),gaussian with linear,application,True,1,3509,code/application/xmulepow_-xpow2_.py
+x^2*e^(-x^2),gaussian with quadratic,application,True,2,3544,code/application/xpow2mulepow_-xpow2_.py
+x^4*e^(-x),quartic decay,application,True,1,3519,code/application/xpow4mulepow_-x_.py
+e^(-2*x)*sin(x),fast decay oscillation,application,True,1,3559,code/application/epow_-2mulx_mulsin_x_.py
+e^(-x)*sin(2*x),decay compressed sine,application,True,1,3560,code/application/epow_-x_mulsin_2mulx_.py
+e^(-x)*cos(2*x),decay compressed cosine,application,True,1,3575,code/application/epow_-x_mulcos_2mulx_.py
+x*e^(-2*x),x fast decay,application,True,1,3507,code/application/xmulepow_-2mulx_.py
+x^2*e^(-2*x),quad fast decay,application,True,1,3521,code/application/xpow2mulepow_-2mulx_.py
+sin(x)^2,sine squared,application,True,1,3512,code/application/sin_x_pow2.py
+cos(x)^2,cosine squared,application,True,1,3489,code/application/cos_x_pow2.py
+e^(x)*x^2,exp quad product alt,application,True,1,3502,code/application/epow_x_mulxpow2.py
+ln(2*x + 1),scaled shifted log,application,True,1,3566,code/application/ln_2mulx___1_.py
+sin(x + 1),phase shifted sine,application,True,1,3495,code/application/sin_x___1_.py
+cos(x - 1),phase shifted cosine,application,True,1,3498,code/application/cos_x_-_1_.py
+sqrt(x)*e^(-x),root decay,application,True,1,3622,code/application/sqrt_x_mulepow_-x_.py
+sqrt(x)*ln(x),root log,application,True,1,3562,code/application/sqrt_x_mulln_x_.py
+x/sqrt(x),x over root,application,True,1,3712,code/application/xdivsqrt_x_.py
+x^2/sqrt(x),quad over root,application,True,1,3855,code/application/xpow2divsqrt_x_.py
+sin(x)/sqrt(x),sine over root,application,True,3,3803,code/application/sin_x_divsqrt_x_.py
+e^x/sqrt(x),exp over root,application,True,2,3892,code/application/epowxdivsqrt_x_.py
+ln(x)/sqrt(x),log over root,application,True,1,3591,code/application/ln_x_divsqrt_x_.py
+x*ln(x + 1),x shifted log,application,True,1,3522,code/application/xmulln_x___1_.py
+x^2*ln(x + 1),quad shifted log,application,True,1,3549,code/application/xpow2mulln_x___1_.py
+e^(x)*ln(x),exp log product,application,True,1,3740,code/application/epow_x_mulln_x_.py
+sin(x)*cos(2*x),sine cosine different freq,application,True,1,3581,code/application/sin_x_mulcos_2mulx_.py
+sin(2*x)*cos(x),compressed sine cosine,application,True,1,3581,code/application/sin_2mulx_mulcos_x_.py
+x^2*sin(x/2),quad stretched sine,application,False,3,0,
+x*cos(x/2),x stretched cosine,application,True,1,3537,code/application/xmulcos_xdiv2_.py
+e^(x/2)*sin(x),slow exp sine,application,True,1,3576,code/application/epow_xdiv2_mulsin_x_.py
+e^(2*x)*cos(x),fast exp cosine,application,True,1,3551,code/application/epow_2mulx_mulcos_x_.py
+ln(x)*cos(x),log cosine product,application,True,1,3562,code/application/ln_x_mulcos_x_.py
+ln(x^2)*sin(x),log squared sine,application,True,1,3573,code/application/ln_xpow2_mulsin_x_.py
+x*ln(x)*cos(x),x log cosine,application,True,1,3611,code/application/xmulln_x_mulcos_x_.py
+sqrt(x)*cos(x),root cosine,application,True,1,3715,code/application/sqrt_x_mulcos_x_.py
+sqrt(x)*e^x,root exp,application,True,1,3659,code/application/sqrt_x_mulepowx.py
+e^(tan(x)),exp of tangent,advanced,True,1,3690,code/advanced/epow_tan_x__.py
+tan(e^x),tangent of exp,advanced,True,1,3544,code/advanced/tan_epowx_.py
+ln(tan(x)),log of tangent,advanced,True,1,3535,code/advanced/ln_tan_x__.py
+tan(ln(x)),tangent of log,advanced,True,1,3541,code/advanced/tan_ln_x__.py
+e^(x^2)*sin(x),exp square sine,advanced,True,1,3557,code/advanced/epow_xpow2_mulsin_x_.py
+e^(x^2)*cos(x),exp square cosine,advanced,True,1,3562,code/advanced/epow_xpow2_mulcos_x_.py
+sin(x^2)*cos(x),sine square cosine,advanced,True,1,3590,code/advanced/sin_xpow2_mulcos_x_.py
+ln(x^2 + 2*x + 1),log of complete square,advanced,True,2,3817,code/advanced/ln_xpow2___2mulx___1_.py
+e^(sqrt(x)),exp of root,advanced,False,3,0,
+ln(ln(x)),double logarithm,advanced,True,1,3520,code/advanced/ln_ln_x__.py
+e^(e^x),double exponential,advanced,True,1,3511,code/advanced/epow_epowx_.py
+x^3*sin(x)*cos(x),cubic sine cosine,advanced,True,1,3605,code/advanced/xpow3mulsin_x_mulcos_x_.py
+x*e^x*ln(x),x exp log,advanced,True,1,3678,code/advanced/xmulepowxmulln_x_.py
+x^2*ln(x)*sin(x),quad log sine,advanced,True,1,3635,code/advanced/xpow2mulln_x_mulsin_x_.py
+x*sin(x)*ln(x),x sine log,advanced,True,1,3607,code/advanced/xmulsin_x_mulln_x_.py
+e^x*ln(x)*cos(x),exp log cosine,advanced,True,1,3813,code/advanced/epowxmulln_x_mulcos_x_.py
+x^2*e^(-x)*sin(x),quad decay sine,advanced,True,1,3600,code/advanced/xpow2mulepow_-x_mulsin_x_.py
+x^3*ln(x)*cos(x),cubic log cosine,advanced,True,1,3908,code/advanced/xpow3mulln_x_mulcos_x_.py
+x^2*sqrt(x)*sin(x),quad root sine,advanced,True,1,3604,code/advanced/xpow2mulsqrt_x_mulsin_x_.py
+x*e^x*cos(2*x),x exp compressed cosine,advanced,True,1,3600,code/advanced/xmulepowxmulcos_2mulx_.py
+x^2*sin(x)*e^(-x),quad sine decay,advanced,True,1,3615,code/advanced/xpow2mulsin_x_mulepow_-x_.py
+x^3*cos(x)*ln(x),cubic cosine log,advanced,True,1,3718,code/advanced/xpow3mulcos_x_mulln_x_.py
+x^2/(1 + x^2),rational with asymptote,advanced,False,3,0,
+x^3/(1 + x^2),cubic over quadratic,advanced,True,1,3555,code/advanced/xpow3div_1___xpow2_.py
+(x^2 - 1)/(x^2 + 1),complex rational,advanced,True,1,3582,code/advanced/_xpow2_-_1_div_xpow2___1_.py
+(x^3 + 1)/(x^2 + 1),cubic over quadratic 2,advanced,True,1,3607,code/advanced/_xpow3___1_div_xpow2___1_.py
+(x^2 + x)/(x^2 + 1),quad linear over quad,advanced,True,1,3573,code/advanced/_xpow2___x_div_xpow2___1_.py
+(x^3 - x)/(x^2 + 1),cubic linear over quad,advanced,True,1,3606,code/advanced/_xpow3_-_x_div_xpow2___1_.py
+x/(x^3 + 1),x over cubic plus,advanced,True,1,3544,code/advanced/xdiv_xpow3___1_.py
+x^2/(x^3 + 1),quad over cubic plus,advanced,True,1,3755,code/advanced/xpow2div_xpow3___1_.py
+(x^2 + 1)/(x^3 + 1),quad plus over cubic plus,advanced,True,1,3611,code/advanced/_xpow2___1_div_xpow3___1_.py
+(x^4 - 1)/(x^2 + 1),quartic over quad plus,advanced,True,1,3517,code/advanced/_xpow4_-_1_div_xpow2___1_.py
+(2*x^2 + x)/(x^2 + 1),scaled quad over quad plus,advanced,True,1,3610,code/advanced/_2mulxpow2___x_div_xpow2___1_.py
+(x^3 + 2*x)/(x^2 + 4),cubic linear over quad 4,advanced,True,1,3615,code/advanced/_xpow3___2mulx_div_xpow2___4_.py
+x^2/(x^2 + 4),quad over quad plus 4,advanced,True,1,3547,code/advanced/xpow2div_xpow2___4_.py
+(x^3 - x^2)/(x + 1),cubic quad over linear,advanced,True,1,3619,code/advanced/_xpow3_-_xpow2_div_x___1_.py
+(x^4 + x^2)/(x^2 + 1),quartic over quad plus,advanced,True,1,3458,code/advanced/_xpow4___xpow2_div_xpow2___1_.py
+sin(x^2)*e^x,sine square exp,advanced,True,2,3556,code/advanced/sin_xpow2_mulepowx.py
+cos(x^2)*ln(x),cosine square log,advanced,True,1,3593,code/advanced/cos_xpow2_mulln_x_.py
+e^(sin(x))*x,exp sine times x,advanced,True,1,3548,code/advanced/epow_sin_x__mulx.py
+ln(sin(x))*x,log sine times x,advanced,True,1,3856,code/advanced/ln_sin_x__mulx.py
+x*e^(cos(x)),x exp cosine,advanced,True,2,3550,code/advanced/xmulepow_cos_x__.py
+sqrt(sin(x))*x,root sine times x,advanced,True,1,3858,code/advanced/sqrt_sin_x__mulx.py
+sqrt(cos(x))*ln(x),root cosine log,advanced,False,3,0,
+sqrt(e^x)*sin(x),root exp sine,advanced,True,1,3586,code/advanced/sqrt_epowx_mulsin_x_.py
+x^2*e^(sin(x)),quad exp sine nested,advanced,True,1,3593,code/advanced/xpow2mulepow_sin_x__.py
+x*ln(sin(x)),x log sine,advanced,True,1,3691,code/advanced/xmulln_sin_x__.py
+e^x*sin(x^2),exp sine square,advanced,True,1,3597,code/advanced/epowxmulsin_xpow2_.py
+ln(x)*cos(x^2),log cosine square,advanced,True,1,3736,code/advanced/ln_x_mulcos_xpow2_.py
+sin(x)*cos(x)*tan(x),triple trig product,advanced,True,1,3482,code/advanced/sin_x_mulcos_x_multan_x_.py
+x*sin(x)*cos(x)*e^x,quad product advanced,advanced,True,1,3577,code/advanced/xmulsin_x_mulcos_x_mulepowx.py
+(sin(x) + cos(x))/x,trig sum over x,advanced,True,3,3657,code/advanced/_sin_x____cos_x__divx.py
+x/(sin(x) + cos(x)),x over trig sum,advanced,True,1,4136,code/advanced/xdiv_sin_x____cos_x__.py
+e^x/(sin(x) + 1),exp over sine plus,advanced,True,1,3646,code/advanced/epowxdiv_sin_x____1_.py
+ln(x)/(cos(x) + 1),log over cosine plus,advanced,True,2,3819,code/advanced/ln_x_div_cos_x____1_.py
+x^2*sin(x)/cos(x),quad sine over cosine,advanced,True,1,3642,code/advanced/xpow2mulsin_x_divcos_x_.py
+e^x*sin(x)/x,exp sine over x,advanced,True,1,3642,code/advanced/epowxmulsin_x_divx.py

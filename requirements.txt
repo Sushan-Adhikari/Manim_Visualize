@@ -1,0 +1,34 @@
+# requirements.txt
+# Core dependencies for DerivativeAnimator project
+
+# Manim and visualization
+manim==0.18.0
+matplotlib==3.8.2
+seaborn==0.13.0
+pillow==10.1.0
+
+# LLM and API
+google-generativeai==0.3.2
+python-dotenv==1.0.0
+
+# Data processing
+pandas==2.1.4
+numpy==1.26.2
+
+# Machine Learning & Fine-tuning
+torch==2.1.2
+transformers==4.36.2
+datasets==2.16.1
+peft==0.7.1
+bitsandbytes==0.41.3
+accelerate==0.25.0
+wandb==0.16.2
+sentencepiece==0.1.99
+protobuf==4.25.1
+
+# Web UI
+gradio==4.13.0
+
+# Utilities
+tqdm==4.66.1
+requests==2.31.0
