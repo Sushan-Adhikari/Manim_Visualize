@@ -83,12 +83,12 @@ Generate Manim animation code for the derivative of: f(x) = {function}
     def generate_code(
         self,
         function: str,
-        max_length: int = 2048,
-        temperature: float = 0.2,
-        top_p: float = 0.9,
+        max_length: int = 3072,  # Increased from 2048 to fit full template
+        temperature: float = 0.3,  # Slightly increased for more complete generation
+        top_p: float = 0.95,  # Increased for more diversity
         top_k: int = 50,
         num_beams: int = 1,
-        repetition_penalty: float = 1.1,
+        repetition_penalty: float = 1.05,  # Reduced to allow template patterns
         do_sample: bool = True,
     ) -> str:
         """Generate Manim code for the given function
@@ -125,7 +125,8 @@ Generate Manim animation code for the derivative of: f(x) = {function}
         with torch.no_grad():
             outputs = self.model.generate(
                 **inputs,
-                max_length=max_length,
+                max_new_tokens=2048,  # Generate up to 2048 NEW tokens (not including prompt)
+                min_new_tokens=800,   # Ensure at least 800 tokens generated
                 temperature=temperature,
                 top_p=top_p,
                 top_k=top_k,
@@ -134,7 +135,6 @@ Generate Manim animation code for the derivative of: f(x) = {function}
                 do_sample=do_sample,
                 pad_token_id=self.tokenizer.pad_token_id,
                 eos_token_id=self.tokenizer.eos_token_id,
-                early_stopping=True,
             )
 
         # Decode
@@ -285,10 +285,11 @@ def main():
             # Generate code
             code = generator.generate_code(
                 function=function,
-                temperature=0.2,  # Low temperature for consistent output
-                top_p=0.9,
+                max_length=3072,  # Ensure full template generation
+                temperature=0.3,  # Slightly higher for complete output
+                top_p=0.95,
                 top_k=50,
-                repetition_penalty=1.1,
+                repetition_penalty=1.05,  # Lower to allow template patterns
                 do_sample=True
             )
 
