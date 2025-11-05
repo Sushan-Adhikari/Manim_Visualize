@@ -70,11 +70,11 @@ class DerivativeAnimatorInference:
         Returns:
             Formatted prompt string
         """
-        # This MUST match the format used in training (finetuning_train.py:156-162)
+        # This MUST match the EXACT format used in the training data!
         prompt = f"""Below is an instruction that describes a task. Write a response that appropriately completes the request.
 
 ### Instruction:
-Generate Manim animation code for the derivative of: f(x) = {function}
+Write a complete Manim scene that demonstrates the derivative of: f(x) = {function}
 
 ### Response:
 """
