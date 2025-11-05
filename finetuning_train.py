@@ -15,7 +15,7 @@ from transformers import (
     AutoModelForCausalLM,
     TrainingArguments,
     Trainer,
-    DataCollatorForLanguageModeling,
+    default_data_collator,
     BitsAndBytesConfig,
     EarlyStoppingCallback
 )
@@ -148,41 +148,65 @@ class FinalTrainer:
         print("\n🔤 Tokenizing dataset...")
 
         def format_and_tokenize(examples):
-            """Format with instruction-following template for DeepSeek"""
-            prompts = []
-            responses = []
+            """Format with instruction-following template - ONLY TRAIN ON RESPONSE"""
+            all_input_ids = []
+            all_attention_masks = []
+            all_labels = []
 
             for i in range(len(examples['instruction'])):
-                # Use a clear instruction format that matches inference
-                # DeepSeek format: instruction -> response
+                # MUST match the actual hf_train.jsonl format!
                 instruction = f"""Below is an instruction that describes a task. Write a response that appropriately completes the request.
 
 ### Instruction:
-Generate Manim animation code for the derivative of: f(x) = {examples['input'][i]}
+{examples['instruction'][i]}
 
 ### Response:
 """
                 response = f"{examples['output'][i]}{self.tokenizer.eos_token}"
 
-                # Combine for full sequence
-                full_prompt = instruction + response
-                prompts.append(full_prompt)
-                responses.append(response)
+                # Tokenize instruction and response separately
+                instruction_tokens = self.tokenizer(
+                    instruction,
+                    truncation=False,
+                    padding=False,
+                    return_tensors=None,
+                )
 
-            # Tokenize full prompts
-            result = self.tokenizer(
-                prompts,
-                truncation=True,
-                max_length=self.data_args.max_length,
-                padding="max_length",
-                return_tensors=None,
-            )
+                response_tokens = self.tokenizer(
+                    response,
+                    truncation=False,
+                    padding=False,
+                    return_tensors=None,
+                )
 
-            # For causal LM, labels = input_ids
-            # The model learns to predict next token given previous tokens
-            result["labels"] = result["input_ids"].copy()
+                # Combine tokens
+                input_ids = instruction_tokens["input_ids"] + response_tokens["input_ids"]
+                attention_mask = instruction_tokens["attention_mask"] + response_tokens["attention_mask"]
 
-            return result
+                # Create labels: -100 for instruction (don't train), actual tokens for response
+                labels = [-100] * len(instruction_tokens["input_ids"]) + response_tokens["input_ids"]
+
+                # Truncate if too long
+                if len(input_ids) > self.data_args.max_length:
+                    input_ids = input_ids[:self.data_args.max_length]
+                    attention_mask = attention_mask[:self.data_args.max_length]
+                    labels = labels[:self.data_args.max_length]
+
+                # Pad to max_length
+                padding_length = self.data_args.max_length - len(input_ids)
+                input_ids = input_ids + [self.tokenizer.pad_token_id] * padding_length
+                attention_mask = attention_mask + [0] * padding_length
+                labels = labels + [-100] * padding_length
+
+                all_input_ids.append(input_ids)
+                all_attention_masks.append(attention_mask)
+                all_labels.append(labels)
+
+            return {
+                "input_ids": all_input_ids,
+                "attention_mask": all_attention_masks,
+                "labels": all_labels
+            }
         
         tokenized_dataset = self.dataset.map(
             format_and_tokenize,
@@ -204,11 +228,8 @@ Generate Manim animation code for the derivative of: f(x) = {examples['input'][i
         self.load_model_and_tokenizer()
         tokenized_dataset = self.tokenize_dataset()
         
-        data_collator = DataCollatorForLanguageModeling(
-            tokenizer=self.tokenizer,
-            mlm=False,
-            pad_to_multiple_of=8
-        )
+        # Use default collator since we handle padding/labels ourselves
+        data_collator = default_data_collator
         
         trainer = Trainer(
             model=self.model,
