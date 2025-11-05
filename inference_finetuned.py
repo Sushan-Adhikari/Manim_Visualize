@@ -70,11 +70,11 @@ class DerivativeAnimatorInference:
         Returns:
             Formatted prompt string
         """
-        # This MUST match the EXACT format used in the training data!
+        # This MUST match the EXACT format in hf_train.jsonl!
         prompt = f"""Below is an instruction that describes a task. Write a response that appropriately completes the request.
 
 ### Instruction:
-Write a complete Manim scene that demonstrates the derivative of: f(x) = {function}
+Build an animated derivative visualization for: f(x) = {function}
 
 ### Response:
 """
