@@ -146,20 +146,30 @@ class FinalTrainer:
     
     def tokenize_dataset(self):
         print("\n🔤 Tokenizing dataset...")
-        
+
         def format_and_tokenize(examples):
-            """Format with explicit instruction template"""
+            """Format with instruction-following template for DeepSeek"""
             prompts = []
+            responses = []
+
             for i in range(len(examples['instruction'])):
-                # Simple, clear format
-                prompt = f"""Task: Generate Manim code for derivative visualization
+                # Use a clear instruction format that matches inference
+                # DeepSeek format: instruction -> response
+                instruction = f"""Below is an instruction that describes a task. Write a response that appropriately completes the request.
 
-Function: {examples['input'][i]}
+### Instruction:
+Generate Manim animation code for the derivative of: f(x) = {examples['input'][i]}
 
-Code:
-{examples['output'][i]}"""
-                prompts.append(prompt)
-            
+### Response:
+"""
+                response = f"{examples['output'][i]}{self.tokenizer.eos_token}"
+
+                # Combine for full sequence
+                full_prompt = instruction + response
+                prompts.append(full_prompt)
+                responses.append(response)
+
+            # Tokenize full prompts
             result = self.tokenizer(
                 prompts,
                 truncation=True,
@@ -167,8 +177,11 @@ Code:
                 padding="max_length",
                 return_tensors=None,
             )
-            
+
+            # For causal LM, labels = input_ids
+            # The model learns to predict next token given previous tokens
             result["labels"] = result["input_ids"].copy()
+
             return result
         
         tokenized_dataset = self.dataset.map(
