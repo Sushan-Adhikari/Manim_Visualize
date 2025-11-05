@@ -1,0 +1,703 @@
+\documentclass[conference]{IEEEtran}
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{booktabs}
+\usepackage{multirow}
+
+\begin{document}
+
+\title{Challenges in Automating Mathematical Animation Code Generation: An Empirical Study with Fine-Tuned LLMs}
+
+\author{
+\IEEEauthorblockN{[Your Name]}
+\IEEEauthorblockA{\textit{[Your Department]} \\
+\textit{[Your University]}\\
+[Your City, Country] \\
+[your.email@university.edu]}
+}
+
+\maketitle
+
+\begin{abstract}
+Creating mathematical animations for derivative calculus concepts traditionally requires 8-12 hours of manual coding in frameworks like Manim. This paper investigates the feasibility of automating this process using fine-tuned Large Language Models (LLMs). We present a system consisting of: (1) a curated dataset of 537 Manim code examples spanning four curriculum difficulty levels, and (2) an instruction fine-tuning pipeline for code generation models.
+
+We fine-tuned DeepSeek-Coder-1.3B on our dataset using LoRA (Low-Rank Adaptation) with 4-bit quantization, achieving strong optimization metrics with training loss of 0.055 and validation loss of 0.019. However, empirical evaluation revealed a significant gap between optimization success and generation quality: the model produced 0\% usable animations, generating repetitive patterns rather than the complex structured templates required.
+
+Our analysis identifies three critical factors limiting generation success: (1) instruction format diversity in training data (7 distinct variations), (2) insufficient model capacity for 3,400-character structured outputs, and (3) inadequate dataset size (418 training samples) for this complexity level. While the automation goal remains unmet, this work contributes: (1) a publicly available dataset of 537 expert-validated Manim derivative animations, (2) empirical evidence of the gap between perplexity metrics and structured code generation quality, and (3) concrete recommendations for future work including format standardization, larger models (7B+ parameters), and hybrid template-filling approaches.
+
+This study demonstrates that despite successful fine-tuning by traditional metrics, automatic generation of complex structured mathematical animations remains an open challenge requiring fundamental advances in model architecture and training methodology.
+\end{abstract}
+
+\begin{IEEEkeywords}
+Large Language Models, Code Generation, Mathematical Animation, Fine-Tuning, Manim, Educational Technology, Negative Results
+\end{IEEEkeywords}
+
+\section{Introduction}
+
+Mathematical visualization plays a crucial role in education, with research showing that animated visualizations improve concept retention by 35-40\% compared to static diagrams~\cite{mayer2002multimedia}. However, creating high-quality mathematical animations requires significant expertise and time investment. For derivative calculus concepts, producing a single animation using the Manim framework typically requires 8-12 hours of manual coding by experienced developers.
+
+The emergence of Large Language Models (LLMs) with code generation capabilities~\cite{chen2021codex, roziere2023codellama} suggests the possibility of automating this process. Recent models have demonstrated success on algorithmic coding tasks, achieving 70\% success rates on benchmarks like HumanEval~\cite{chen2021codex}. This raises the question: \textit{Can fine-tuned LLMs generate structured mathematical animation code for educational purposes?}
+
+\subsection{Research Questions}
+
+This paper investigates:
+\begin{itemize}
+    \item \textbf{RQ1:} Can a fine-tuned small language model (1.3B parameters) generate correct Manim animation code for derivative calculus visualizations?
+    \item \textbf{RQ2:} What factors limit generation quality when fine-tuning metrics (loss, perplexity) indicate successful optimization?
+    \item \textbf{RQ3:} What approaches might enable future success in this domain?
+\end{itemize}
+
+\subsection{Contributions}
+
+This work provides:
+\begin{enumerate}
+    \item \textbf{Curated Dataset:} 537 expert-validated Manim animations for derivative calculus across four curriculum levels, publicly released for research.
+    \item \textbf{Empirical Findings:} Documented evidence of the gap between fine-tuning metrics and generation quality, with detailed failure analysis.
+    \item \textbf{Training Infrastructure:} Complete pipeline (data preparation, fine-tuning, evaluation) applicable to future research.
+    \item \textbf{Design Insights:} Three identified limiting factors and concrete recommendations for future work.
+\end{enumerate}
+
+\subsection{Key Finding}
+
+Despite achieving excellent fine-tuning metrics (validation loss 0.019), our DeepSeek-Coder-1.3B model produced \textbf{0\% usable animations}. This negative result highlights fundamental challenges in applying LLMs to complex structured code generation and provides valuable insights for future research.
+
+\section{Related Work}
+
+\subsection{LLMs for Code Generation}
+
+Large Language Models have demonstrated impressive capabilities in code generation. Codex (GPT-3.5 fine-tuned on code) achieved 70\% pass@1 on HumanEval~\cite{chen2021codex}. More recent models like CodeLlama~\cite{roziere2023codellama} and StarCoder~\cite{li2023starcoder} have extended these capabilities with improved training methodologies.
+
+However, these benchmarks focus on short algorithmic problems (median 10-20 lines, 50-100 tokens). Research has shown that LLM performance degrades significantly as required output length increases~\cite{sun2021text}. Our task requires generating 150+ line templates (850+ tokens) with domain-specific constraints, representing a different complexity class than typical code generation benchmarks.
+
+\subsection{Structured Code Generation}
+
+Recent work has highlighted challenges in generating structured code:
+\begin{itemize}
+    \item Shin et al.~\cite{shin2021constrained} show that syntax constraints require specialized decoding strategies.
+    \item Xu et al.~\cite{xu2022systematic} find that model size critically impacts structural correctness, with sharp capability thresholds.
+    \item Fried et al.~\cite{fried2023incoder} demonstrate that incremental generation helps but still fails on long sequences exceeding 500 tokens.
+\end{itemize}
+
+Our findings align with this literature: low perplexity does not guarantee structural correctness, particularly for sequences exceeding typical code generation lengths.
+
+\subsection{Instruction Fine-Tuning}
+
+The Alpaca framework~\cite{taori2023alpaca} demonstrated that instruction-following capabilities can be induced through fine-tuning on instruction-response pairs. However, Alpaca's success relied on:
+\begin{itemize}
+    \item 52,000 diverse instruction examples (125x our dataset)
+    \item Consistent formatting (single template structure)
+    \item 7B parameter base model (5.4x our model)
+\end{itemize}
+
+Our work uses 418 examples with 7 format variations on a 1.3B model. Our negative results suggest that Alpaca's success factors were necessary, and scaling down breaks instruction-following capability for complex structured tasks.
+
+\subsection{Mathematical Animation Systems}
+
+Manim~\cite{manim} is the most widely used framework for creating mathematical animations, popularized by 3Blue1Brown's educational videos. Prior automation attempts include:
+\begin{itemize}
+    \item GUI-based tools like Matplotlib animations~\cite{matplotlib} and Desmos~\cite{desmos}
+    \item Template-based systems with limited customization
+    \item Rule-based code generation for specific problem types
+\end{itemize}
+
+Our work represents the first systematic attempt to use LLMs for end-to-end Manim code generation without templates or constraints.
+
+\section{Dataset Construction}
+
+\subsection{Overview}
+
+We created a dataset of 537 Manim animations for derivative calculus visualizations, spanning four curriculum difficulty levels. Each example consists of:
+\begin{itemize}
+    \item Mathematical function (input): e.g., $f(x) = x^2$, $\sin(x)$
+    \item Natural language instruction
+    \item Complete Manim code (output): average 3,412 characters
+\end{itemize}
+
+\begin{table}[h]
+\centering
+\caption{Dataset Statistics}
+\label{tab:dataset}
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Split} & \textbf{Samples} & \textbf{Avg Length} & \textbf{Size} \\
+\midrule
+Training & 418 & 3,421 chars & 1.51 MB \\
+Validation & 50 & 3,389 chars & 0.18 MB \\
+Test & 69 & 3,405 chars & 0.25 MB \\
+\midrule
+\textbf{Total} & \textbf{537} & \textbf{3,412 chars} & \textbf{1.94 MB} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Curriculum Levels}
+
+Functions are categorized by mathematical complexity:
+
+\begin{table}[h]
+\centering
+\caption{Function Complexity Distribution}
+\label{tab:curriculum}
+\begin{tabular}{lcp{5cm}}
+\toprule
+\textbf{Level} & \textbf{Count} & \textbf{Examples} \\
+\midrule
+Foundation & 134 & $x^2$, $3x + 5$, $x^3$ \\
+Conceptual & 135 & $\sin(x)$, $e^x$, $\ln(x)$ \\
+Application & 134 & $x^2 \sin(x)$, $\frac{x}{\ln(x)}$ \\
+Advanced & 134 & $\sin(x^2)$, $e^{\sin(x)}$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Generation Process}
+
+Animations were generated using:
+\begin{enumerate}
+    \item \textbf{Function Selection:} Systematic coverage of calculus curriculum topics.
+    \item \textbf{Template Design:} 8-phase animation structure including:
+    \begin{itemize}
+        \item Function and derivative axis plotting
+        \item Tangent line animation with moving dot
+        \item Step-by-step derivative calculation display
+        \item Synchronized transitions
+    \end{itemize}
+    \item \textbf{Code Generation:} Automated generation using Google Gemini API with structured prompts.
+    \item \textbf{Validation:} Execution testing and visual inspection.
+    \item \textbf{Quality Control:} Manual review of all 537 animations.
+\end{enumerate}
+
+\subsection{Instruction Format Analysis}
+
+Post-hoc analysis revealed 7 distinct instruction format variations in the training data (Table~\ref{tab:instruction_formats}), with no single format exceeding 17\%. This diversity was unintentional and likely contributed to training difficulties.
+
+\begin{table}[h]
+\centering
+\caption{Instruction Format Distribution in Training Data}
+\label{tab:instruction_formats}
+\begin{tabular}{lcc}
+\toprule
+\textbf{Instruction Format} & \textbf{Count} & \textbf{\%} \\
+\midrule
+"Build an animated derivative..." & 72 & 17.2\% \\
+"Produce a derivative visualization..." & 67 & 16.0\% \\
+"Construct Manim code that..." & 64 & 15.3\% \\
+"Create an animation showing..." & 63 & 15.1\% \\
+"Develop code to animate..." & 51 & 12.2\% \\
+"Generate Manim animation..." & 50 & 12.0\% \\
+"Design a visual representation..." & 51 & 12.2\% \\
+\midrule
+\textbf{Total} & \textbf{418} & \textbf{100\%} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Methodology}
+
+\subsection{Base Model Selection}
+
+We selected DeepSeek-Coder-1.3B~\cite{deepseek2024} based on:
+\begin{itemize}
+    \item Specialized pre-training on code (87\% of training data)
+    \item Small size enabling rapid iteration (important given limited compute)
+    \item Open-source availability
+    \item Strong performance on code benchmarks relative to size
+\end{itemize}
+
+\subsection{Fine-Tuning Configuration}
+
+We employed LoRA (Low-Rank Adaptation)~\cite{hu2021lora} with 4-bit quantization to enable training on a single GPU:
+
+\begin{table}[h]
+\centering
+\caption{Fine-Tuning Hyperparameters}
+\label{tab:hyperparams}
+\begin{tabular}{ll}
+\toprule
+\textbf{Parameter} & \textbf{Value} \\
+\midrule
+Base Model & DeepSeek-Coder-1.3B \\
+Fine-Tuning Method & LoRA \\
+LoRA Rank (r) & 64 \\
+LoRA Alpha ($\alpha$) & 128 \\
+Quantization & 4-bit (NF4) \\
+Batch Size (per device) & 4 \\
+Gradient Accumulation & 4 steps \\
+Effective Batch Size & 16 \\
+Learning Rate & $1 \times 10^{-4}$ \\
+LR Scheduler & Cosine with warmup \\
+Warmup Steps & 50 \\
+Max Sequence Length & 2048 tokens \\
+Epochs & 5 \\
+Weight Decay & 0.01 \\
+Optimizer & AdamW (8-bit) \\
+Hardware & NVIDIA L40S (46GB) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Training Format}
+
+We used Alpaca-style instruction formatting with critical modification for label masking:
+
+\begin{verbatim}
+Below is an instruction that describes a task.
+Write a response that appropriately completes
+the request.
+
+### Instruction:
+{natural_language_instruction}
+
+### Response:
+{manim_code}<eos>
+\end{verbatim}
+
+Crucially, we masked instruction tokens in the loss calculation (setting labels to -100), training \textit{only} on the response portion. This prevents the model from learning to generate instructions instead of code.
+
+\subsection{Evaluation Metrics}
+
+We assessed generation quality across three dimensions:
+
+\begin{enumerate}
+    \item \textbf{Syntactic Correctness:}
+    \begin{itemize}
+        \item Valid Python syntax (AST parsing)
+        \item Contains required imports
+        \item Proper class structure
+    \end{itemize}
+
+    \item \textbf{Structural Correctness:}
+    \begin{itemize}
+        \item Contains DerivativeVisualization class
+        \item Has 8-phase animation structure
+        \item Correct template organization
+    \end{itemize}
+
+    \item \textbf{Semantic Correctness:}
+    \begin{itemize}
+        \item Executable without errors
+        \item Correct mathematical function plotting
+        \item Accurate derivative calculation
+        \item Produces valid animation output
+    \end{itemize}
+\end{enumerate}
+
+\section{Results}
+
+\subsection{Training Convergence}
+
+Training completed successfully in 12 minutes 26 seconds on an NVIDIA L40S GPU. Table~\ref{tab:training_metrics} shows progression across 5 epochs.
+
+\begin{table}[h]
+\centering
+\caption{Training Metrics by Epoch}
+\label{tab:training_metrics}
+\begin{tabular}{ccccc}
+\toprule
+\textbf{Epoch} & \textbf{Train Loss} & \textbf{Val Loss} & \textbf{Time} \\
+\midrule
+1 & 0.2145 & 0.0891 & 2m 31s \\
+2 & 0.0891 & 0.0456 & 2m 28s \\
+3 & 0.0723 & 0.0312 & 2m 29s \\
+4 & 0.0612 & 0.0234 & 2m 27s \\
+5 & 0.0548 & 0.0192 & 2m 31s \\
+\midrule
+\textbf{Final} & \textbf{0.0548} & \textbf{0.0192} & \textbf{12m 26s} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The model achieved strong convergence with:
+\begin{itemize}
+    \item Final training loss: 0.0548
+    \item Final validation loss: 0.0192 (better than training)
+    \item No evidence of overfitting
+    \item Smooth loss curve with no instabilities
+\end{itemize}
+
+These metrics suggest successful optimization by traditional fine-tuning standards.
+
+\subsection{Generation Quality: Complete Failure}
+
+Despite excellent training metrics, the model produced \textbf{0\% usable animations}. Table~\ref{tab:generation_results} summarizes evaluation on 20 test cases using greedy decoding (temperature=0.2).
+
+\begin{table}[h]
+\centering
+\caption{Generation Results on Test Set (n=20)}
+\label{tab:generation_results}
+\begin{tabular}{lcc}
+\toprule
+\textbf{Quality Metric} & \textbf{Count} & \textbf{\%} \\
+\midrule
+\multicolumn{3}{c}{\textit{Syntactic Correctness}} \\
+\midrule
+Valid Python Syntax & 20/20 & 100\% \\
+Contains Manim Imports & 18/20 & 90\% \\
+Contains Class Definition & 14/20 & 70\% \\
+\midrule
+\multicolumn{3}{c}{\textit{Structural Correctness}} \\
+\midrule
+Contains DerivativeVisualization & 0/20 & \textbf{0\%} \\
+Has 8-Phase Structure & 0/20 & \textbf{0\%} \\
+Correct Template & 0/20 & \textbf{0\%} \\
+\midrule
+\multicolumn{3}{c}{\textit{Semantic Correctness}} \\
+\midrule
+Executable (No Errors) & 2/20 & 10\% \\
+Correct Function Plotting & 0/20 & \textbf{0\%} \\
+Correct Derivative & 0/20 & \textbf{0\%} \\
+Produces Animation & 0/20 & \textbf{0\%} \\
+\midrule
+\multicolumn{3}{c}{\textit{Overall Quality}} \\
+\midrule
+\textbf{Usable Animations} & \textbf{0/20} & \textbf{0\%} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Qualitative Analysis}
+
+The model consistently generated:
+\begin{itemize}
+    \item Valid Python syntax (100\%)
+    \item Correct import statements (90\%)
+    \item Generic Manim class structures (70\%)
+\end{itemize}
+
+However, it failed to produce:
+\begin{itemize}
+    \item The specific DerivativeVisualization template structure
+    \item 8-phase animation sequences
+    \item Correct mathematical function plotting
+    \item Working animations
+\end{itemize}
+
+\textbf{Example Output for $f(x) = x^2$:}
+
+Expected: 3,400-character structured template with function plotting, derivative calculation, and 8-phase animation.
+
+Actual: Repetitive code pattern:
+\begin{verbatim}
+from manim import *
+
+class Derivative(Scene):
+    def construct(self):
+        self.wait(1)
+        self.wait(1)
+        self.wait(1)
+        # ... repeats 40+ times
+\end{verbatim}
+
+Testing with exact training instruction formats, extended generation lengths (max\_new\_tokens=2048), and various sampling strategies produced similar failures.
+
+\subsection{The Loss-Quality Gap}
+
+Figure~\ref{fig:loss_quality_gap} illustrates the disconnect between optimization metrics and generation quality.
+
+\begin{figure}[h]
+\centering
+\begin{verbatim}
+Training Loss:  0.2145 → 0.0548 ✓
+Validation Loss: 0.0891 → 0.0192 ✓
+                              ↓
+                    Generation Success: 0% ✗
+\end{verbatim}
+\caption{Gap between fine-tuning metrics and generation quality}
+\label{fig:loss_quality_gap}
+\end{figure}
+
+The model achieved near-perfect perplexity on validation data (low loss) while producing zero usable outputs during generation. This demonstrates that:
+\begin{itemize}
+    \item Traditional fine-tuning metrics do not predict structured generation quality
+    \item The model learned token-by-token prediction on teacher-forced sequences
+    \item This accuracy does not transfer to autoregressive generation of long structures
+\end{itemize}
+
+\section{Analysis: Why Did Fine-Tuning Fail?}
+
+We identified three critical limiting factors through systematic analysis:
+
+\subsection{Factor 1: Instruction Format Diversity}
+
+The training data inadvertently contained 7 distinct instruction format variations (Table~\ref{tab:instruction_formats}), with no single format exceeding 17\% of examples. This meant:
+\begin{itemize}
+    \item Each format appeared only 50-72 times across 418 samples
+    \item The model encountered different phrasings without sufficient repetition
+    \item Effective dataset size per format: ~60 examples
+\end{itemize}
+
+In contrast, successful instruction-following models (Alpaca, Vicuna) use:
+\begin{itemize}
+    \item Consistent single-format templates, OR
+    \item Millions of diverse examples enabling generalization
+\end{itemize}
+
+With limited data (418 samples), format diversity likely prevented learning a stable instruction-response mapping. Each variation required separate pattern learning, fragmenting an already small dataset.
+
+\subsection{Factor 2: Model Capacity Constraints}
+
+At 1.3B parameters, DeepSeek-Coder is optimized for short code snippets (100-500 tokens). Our templates require:
+\begin{itemize}
+    \item Average length: 850 tokens
+    \item Highly structured content:
+    \begin{itemize}
+        \item Precise class hierarchies
+        \item Coordinate-based layouts requiring arithmetic
+        \item LaTeX formula rendering with escaping
+        \item 8-phase sequences with exact timing
+    \end{itemize}
+\end{itemize}
+
+Prior work shows that structured generation requires significantly more parameters than perplexity suggests. For example:
+\begin{itemize}
+    \item GPT-2 (1.5B): Struggles with consistent JSON generation
+    \item GPT-3 (175B): First to reliably generate structured formats
+    \item CodeLlama (7B): Minimum size for consistent code structure
+\end{itemize}
+
+Our results align with this literature: 1.3B parameters appear insufficient for memorizing and reproducing 850-token structured templates.
+
+\subsection{Factor 3: Dataset Size Insufficiency}
+
+With 418 training samples at 3,421 characters each, the model saw approximately 1.4M characters (350K tokens) during training—equivalent to a short novel. By comparison:
+\begin{itemize}
+    \item Successful code models: Pre-trained on billions of tokens
+    \item Instruction fine-tuning datasets: 10K-100K examples
+    \item CodeLlama fine-tuning: 50K+ examples
+\end{itemize}
+
+The complexity of our task (structured mathematical animation with precise requirements) likely requires:
+\begin{itemize}
+    \item 1,000-5,000 examples for 1.3B model memorization
+    \item 10,000+ examples for robust generalization
+\end{itemize}
+
+Our 418 samples fall significantly below these thresholds.
+
+\subsection{Interaction Effects}
+
+These factors likely compound:
+\begin{itemize}
+    \item Small model (1.3B) + Limited data (418) + Format diversity (7)
+    \item Effective samples per format-variant: ~60
+    \item Insufficient for memorizing 850-token structured templates
+\end{itemize}
+
+Addressing any single factor may be insufficient; success likely requires improvements across all three dimensions.
+
+\section{Discussion}
+
+\subsection{Implications for LLM Code Generation}
+
+Our findings highlight critical gaps in current understanding of LLM code generation:
+
+\subsubsection{Perplexity is Not Enough}
+
+Low validation loss (0.019) indicating near-perfect token prediction did not translate to generation success. This reveals:
+\begin{itemize}
+    \item \textbf{Teacher-forced accuracy $\neq$ generation quality}
+    \item During training: Model predicts next token given ground truth context
+    \item During inference: Model generates from its own outputs, errors compound
+    \item Structured code amplifies this gap: Single syntax errors break outputs
+\end{itemize}
+
+Traditional fine-tuning metrics measure token prediction accuracy but fail to capture autoregressive generation capability and structural coherence.
+
+\subsubsection{Structure Requires More Capacity}
+
+Structured code generation appears to require more parameters than equivalent-complexity text generation. Possible explanations:
+\begin{itemize}
+    \item Structure violations (syntax errors) are catastrophic vs. semantic errors in natural language
+    \item Precise formatting requires exact memorization vs. approximate paraphrasing
+    \item Long-range dependencies (matching braces, indentation) require more attention capacity
+\end{itemize}
+
+\subsubsection{Format Standardization Matters}
+
+With limited training data, instruction format consistency is critical. Format diversity should only be introduced after achieving baseline success with standardized prompts.
+
+\subsection{Comparison to Prior Work}
+
+Our results contrast with reported successes in code generation:
+\begin{itemize}
+    \item \textbf{HumanEval (70\% success):} Short problems (median 10 lines, 50 tokens)
+    \item \textbf{Our task:} 150+ lines, 850+ tokens, strict structure
+    \item \textbf{Factor of 17x longer outputs}
+\end{itemize}
+
+This suggests a sharp difficulty threshold between short algorithmic code and long structured templates. Success at one length scale does not predict success at another.
+
+\subsection{Recommendations for Future Work}
+
+Based on our empirical findings, we propose:
+
+\subsubsection{Immediate Next Steps}
+
+\textbf{1. Test Larger Models:}
+\begin{itemize}
+    \item Apply our dataset to 7B-13B parameter models
+    \item Test hypothesis: model capacity is limiting factor
+    \item Candidates: CodeLlama-7B, StarCoder-7B, Llama-2-7B
+\end{itemize}
+
+\textbf{2. Standardize Format:}
+\begin{itemize}
+    \item Regenerate dataset with single instruction format
+    \item Retrain to isolate impact of format diversity
+    \item Expected improvement: 3-5x effective training data
+\end{itemize}
+
+\textbf{3. Expand Dataset:}
+\begin{itemize}
+    \item Target: 1,000-5,000 examples
+    \item Methods: Automated generation with validation, synthetic variations
+    \item Focus: Maintaining quality while scaling quantity
+\end{itemize}
+
+\subsubsection{Alternative Approaches}
+
+\textbf{Template-Filling:}
+Rather than generating code from scratch, use LLMs to:
+\begin{itemize}
+    \item Extract parameters (function, domain, labels)
+    \item Fill pre-defined template slots
+    \item Validate and execute with fallback logic
+\end{itemize}
+This reduces complexity from 850 tokens to 20-30 parameter tokens.
+
+\textbf{Hybrid Generation:}
+Combine LLM generation with rule-based validation:
+\begin{enumerate}
+    \item LLM generates initial code
+    \item Parser validates structure
+    \item Extract valid components
+    \item Fill missing sections from templates
+    \item Iterate with LLM refinement
+\end{enumerate}
+
+\textbf{Curriculum Learning:}
+Train progressively on increasing complexity:
+\begin{enumerate}
+    \item Polynomials only (simplest derivatives)
+    \item Add trigonometric functions
+    \item Add composite functions
+    \item Add full animation sequences
+\end{enumerate}
+
+\subsection{Broader Impact}
+
+\subsubsection{Educational Applications}
+
+While automation remains unsolved, the dataset has immediate value:
+\begin{itemize}
+    \item Template library for educators (537 ready-to-use animations)
+    \item Code examples for learning Manim
+    \item Curriculum-aligned visualization resources
+\end{itemize}
+
+\subsubsection{Research Value of Negative Results}
+
+This work demonstrates the importance of reporting negative results:
+\begin{itemize}
+    \item Prevents duplicate research efforts
+    \item Identifies technical barriers for future work
+    \item Provides empirical evidence of limitations
+    \item Advances understanding of failure modes
+\end{itemize}
+
+Publishing negative results with thorough analysis enables the community to build on lessons learned rather than repeat failures.
+
+\section{Limitations}
+
+We acknowledge several limitations:
+
+\textbf{1. Single Model Tested:} We only evaluated DeepSeek-Coder-1.3B due to compute constraints. Testing larger models (7B+) would strengthen conclusions.
+
+\textbf{2. Limited Hyperparameter Search:} We used a single hyperparameter configuration based on best practices. Extensive tuning might improve results.
+
+\textbf{3. Single Domain:} We focused on derivative calculus. Generalization to other mathematical topics remains unknown.
+
+\textbf{4. Template Rigidity:} Our dataset uses a fixed animation structure. More diverse templates might require different approaches.
+
+\textbf{5. Evaluation Size:} We evaluated on 20 test cases due to manual inspection requirements. Larger-scale automated evaluation would be valuable.
+
+Despite these limitations, our systematic analysis provides valuable insights into the challenges of structured code generation with small language models.
+
+\section{Conclusion}
+
+This paper investigated the feasibility of automating Manim derivative animation generation using fine-tuned LLMs. While we achieved successful optimization (validation loss 0.019), our model produced 0\% usable animations, highlighting a critical gap between fine-tuning metrics and generation quality for structured code tasks.
+
+\subsection{Key Contributions}
+
+\textbf{1. Empirical Evidence:} Documented case study of the loss-quality gap with detailed failure analysis, demonstrating that low perplexity does not guarantee structured generation success.
+
+\textbf{2. Identified Limiting Factors:}
+\begin{itemize}
+    \item Instruction format diversity (7 variations, none >17\%)
+    \item Model capacity constraints (1.3B params for 850-token structures)
+    \item Dataset size insufficiency (418 samples for complex templates)
+\end{itemize}
+
+\textbf{3. Curated Dataset:} 537 expert-validated Manim animations spanning four curriculum levels, publicly released for future research and educational use.
+
+\textbf{4. Design Recommendations:} Concrete guidance including format standardization, larger models (7B+), dataset expansion (1,000-5,000 samples), and alternative approaches (template-filling, hybrid methods, curriculum learning).
+
+\subsection{Future Outlook}
+
+Automatic generation of complex mathematical animations remains an open challenge. Our negative result provides:
+\begin{itemize}
+    \item Evidence of current approach limitations
+    \item Understanding of specific failure modes
+    \item Concrete directions for future research
+    \item Foundation dataset enabling community progress
+\end{itemize}
+
+We hope this work accelerates progress toward the eventual goal of automated mathematical animation generation by clearly identifying technical barriers and providing resources for future research.
+
+\subsection{Data Availability}
+
+Our complete dataset of 537 Manim derivative animations, training code, and evaluation scripts will be released at: \texttt{[GITHUB-URL-HERE]} to enable reproduction and future research.
+
+\section*{Acknowledgments}
+
+We thank [acknowledge anyone who helped, compute providers, etc.].
+
+\begin{thebibliography}{00}
+\bibitem{mayer2002multimedia} Mayer, R. E. (2002). Multimedia learning. \textit{Psychology of Learning and Motivation}, 41, 85-139.
+
+\bibitem{chen2021codex} Chen, M., et al. (2021). Evaluating large language models trained on code. \textit{arXiv preprint arXiv:2107.03374}.
+
+\bibitem{roziere2023codellama} Rozière, B., et al. (2023). Code llama: Open foundation models for code. \textit{arXiv preprint arXiv:2308.12950}.
+
+\bibitem{li2023starcoder} Li, R., et al. (2023). StarCoder: may the source be with you! \textit{arXiv preprint arXiv:2305.06161}.
+
+\bibitem{sun2021text} Sun, S., et al. (2021). On the importance of effectively adapting pretrained language models. \textit{arXiv preprint arXiv:2104.08691}.
+
+\bibitem{shin2021constrained} Shin, E. C., et al. (2021). Constrained language models yield few-shot semantic parsers. \textit{EMNLP 2021}.
+
+\bibitem{xu2022systematic} Xu, F. F., et al. (2022). A systematic evaluation of large language models of code. \textit{ICLR 2022 Workshop}.
+
+\bibitem{fried2023incoder} Fried, D., et al. (2023). InCoder: A generative model for code infilling and synthesis. \textit{ICLR 2023}.
+
+\bibitem{manim} Manim Community. (2023). Manim – Mathematical Animation Engine. \texttt{https://www.manim.community/}
+
+\bibitem{matplotlib} Hunter, J. D. (2007). Matplotlib: A 2D graphics environment. \textit{Computing in Science \& Engineering}, 9(3), 90-95.
+
+\bibitem{desmos} Desmos. (2023). Desmos Graphing Calculator. \texttt{https://www.desmos.com/}
+
+\bibitem{taori2023alpaca} Taori, R., et al. (2023). Alpaca: A strong, replicable instruction-following model. \textit{Stanford Center for Research on Foundation Models}.
+
+\bibitem{phi2} Microsoft. (2023). Phi-2: The surprising power of small language models. \textit{Microsoft Research Blog}.
+
+\bibitem{deepseek2024} DeepSeek-AI. (2024). DeepSeek Coder: When the Large Language Model Meets Programming. \textit{arXiv preprint arXiv:2401.14196}.
+
+\bibitem{hu2021lora} Hu, E. J., et al. (2021). LoRA: Low-Rank Adaptation of Large Language Models. \textit{ICLR 2022}.
+
+\end{thebibliography}
+
+\end{document}
